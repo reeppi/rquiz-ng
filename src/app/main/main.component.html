@@ -1,0 +1,11 @@
+<form class="example-form">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Visan tunnus</mat-label>
+      <input name="nimi"  matInput  maxlength="256" placeholder="Anna visan tunnus" [(ngModel)]="quizName">
+    </mat-form-field>
+  </form>
+
+  <button mat-raised-button (click)="quizClick();">Avaa visa</button>  
+  <button mat-raised-button (click)="editClick();">Muokkaa visaa</button>  
+  
+  

@@ -1,0 +1,72 @@
+
+<div *ngIf="dataService.questionsData">
+   Visan tunnus : {{ this.quizName }}<br>
+  <form class="example-form">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Otsikko</mat-label>
+      <input name="nimi" (change)="testChange()" matInput #message maxlength="256" placeholder="Kirjoita visalle lyhyt otsikko" [(ngModel)]="dataService.questionsData.title">
+      <mat-hint align="end">{{message.value.length}} / 100</mat-hint>
+    </mat-form-field>
+  </form>
+  
+
+<mat-accordion>
+  <mat-expansion-panel  *ngFor="let question of dataService.questionsData.questions; index as x" (opened)="statePanel.value = '1'" (closed)="statePanel.value = '0'">
+    <input type="hidden" [value]="'0'" #statePanel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+
+        <div *ngIf="question.text!=''">
+        {{ (x+1) }}. {{ question.text }}
+        </div>
+        <div *ngIf="question.text=='' && statePanel.value=='0'" >
+          {{ (x+1) }}. Muokkaa kysymystä tästä
+          </div>
+        <div *ngIf="question.text=='' && statePanel.value=='1'" >
+            {{ (x+1) }}.
+        </div>
+
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <input size="50" [(ngModel)]="question.text" placeholder="Kirjoita kysymys" >
+    <mat-radio-group [(ngModel)]="question.true" aria-labelledby="example-radio-group-label" class="example-radio-group">
+      <mat-radio-button class="example-radio-button" *ngFor="let option of question.options; index as i" [value]="i">
+        <input size="20" [value]="question.options[i]" (change)="optionChanged($event,i,x)">
+        <a  (click)="removeOption(i,x)">(Poista)</a>
+      </mat-radio-button>
+   </mat-radio-group>
+
+  <!-- <input size="20" value="" #newOption> -->
+   <button mat-raised-button (click)="addOption('',x);">Lisää vaihtoehto</button> 
+   <button mat-raised-button (click)="removeQuestion(x)">Poista kysymys</button> 
+
+  </mat-expansion-panel>
+</mat-accordion>
+
+<button mat-raised-button (click)="addQuestion()">Lisää kysymys</button>  
+
+<button mat-raised-button (click)="openQuiz()"> Avaa Visa </button>  
+
+
+<br><br>
+<form class="example-form">
+  <form class="example-form">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Käyttäjätunnus</mat-label>
+      <input name="user" matInput #message maxlength="50" placeholder="Anna käyttäjätunnus" [(ngModel)]="dataService.username">
+    </mat-form-field>
+  </form>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Salasana</mat-label>
+    <input type="password" name="password" matInput #message maxlength="50" placeholder="Anna salasana" [(ngModel)]="dataService.password">
+  </mat-form-field>
+</form>
+
+<button mat-raised-button (click)="dataService.updateQuestion(quizName)">Tallenna visa</button><br>
+{{ dataService.editErrorMsg }}
+
+</div>
+<div *ngIf="dataService.loadingQuiz">
+  <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,6 @@
+<div *ngIf="dataService.questionsData">
+<li type="1" *ngFor="let question of dataService.questionsData.questions; index as x">
+    <strong>{{question.text}} </strong>
+    <div *ngFor="let option of question.options; index as i" [style.background-color]="getBackGround(x,i)">{{option}} </div>  
+  </li>
+</div>
