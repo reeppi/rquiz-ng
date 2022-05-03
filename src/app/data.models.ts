@@ -10,3 +10,13 @@ export type questionType = {
     true: number;
     answer: number | null;
 }
+
+export type scoresType = {
+  name: string;
+  scores: Array<scoreType>
+}
+
+export type scoreType = {   
+  name: string;
+  score: number;
+}

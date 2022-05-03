@@ -16,6 +16,8 @@ import { MatIconModule} from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MainComponent } from './main/main.component';
+import { ScoreboardComponent } from './scoreboard/scoreboard.component';
+import {MatTableModule} from '@angular/material/table';
 
 
 @NgModule({
@@ -25,6 +27,7 @@ import { MainComponent } from './main/main.component';
     ResultsComponent,
     EditComponent,
     MainComponent,
+    ScoreboardComponent,
   ],
   imports: [
     FormsModule,
@@ -37,11 +40,13 @@ import { MainComponent } from './main/main.component';
     MatIconModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatTableModule,
     
     RouterModule.forRoot([
       { path: '', component: MainComponent },
       { path: ':quizName/edit', component: EditComponent },
       { path: ':quizName/results', component: ResultsComponent },
+      { path: ':quizName/scores', component: ScoreboardComponent },
       { path: ':quizName/:questionNumber', component: QuestionComponent },
       { path: ':quizName', redirectTo: ':quizName/1', pathMatch: 'full' }
     ]),

@@ -6,6 +6,7 @@ import localQuiz from './quiz.json';
 export class DataService {
 
   public questionsData : models.questionsType | null;
+  public scoresData : models.scoresType | null;
   public errorMsg : string ="";
   public editErrorMsg : string ="";
   public username : string ="";
@@ -18,6 +19,7 @@ export class DataService {
 
   constructor(){
       this.questionsData = null;
+      this.scoresData = null;
       if ( this.online == true ) 
           this.APIURL = "https://reeppi-quiz.netlify.app";
       else 
@@ -49,9 +51,7 @@ export class DataService {
     if (response.ok) {
       const data  = await response.json();
       if ( data.hasOwnProperty('error') ) 
-      {
           this.editErrorMsg = data.error;
-      }
     }
     this.loadingQuiz=false;
   }
@@ -65,6 +65,7 @@ export class DataService {
    
     this.loadingQuiz=true;
     const response = await window.fetch(this.APIURL+"/quiz?name="+quizName);
+    this.loadingQuiz=false;
     if (response.ok) {
        const data  = await response.json();
        if ( data.hasOwnProperty('error') ) 
@@ -79,12 +80,33 @@ export class DataService {
          this.errorMsg = "";
          this.questionsData  = data;
        }
-       console.log("Data : "+ this.questionsData?.name);
+       console.log("DataName : "+ this.questionsData?.name);
     }
-    this.loadingQuiz=false;
-
-
   }
+
+  
+  async fetchScores(quizName: string) 
+  {
+    this.loadingQuiz=true;
+    const response = await window.fetch(this.APIURL+"/scoreboard?name="+quizName);
+    this.loadingQuiz=false;
+    if (response.ok) {
+       const data  = await response.json();
+       if ( data.hasOwnProperty('error') ) 
+       {
+          this.scoresData = null;
+          this.errorMsg = data.error;
+       }
+       else 
+       {
+         this.errorMsg = "";
+         this.scoresData  = data;
+       }
+       console.log("Fetched scores : "+ this.scoresData?.name);
+    }
+    
+  }
+
 
 
 }
