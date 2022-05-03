@@ -1,4 +1,4 @@
 # RquizNg
 
-Web-käyttöliittymä rquiz-apille. Käyttöliittymästä voidaan myös hallinoida kysymyksiä.<br>
+Web-käyttöliittymä rquiz-apille.<br>
 Avainsanat :  Angular, Typescript
