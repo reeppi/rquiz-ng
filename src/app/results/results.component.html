@@ -4,3 +4,24 @@
     <div *ngFor="let option of question.options; index as i" [style.background-color]="getBackGround(x,i)">{{option}} </div>  
   </li>
 </div>
+
+
+<div *ngIf="dataService.loadingQuiz">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="!dataService.loadingQuiz && dataService.questionsData">
+<form class="example-form">
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Nimimerkki</mat-label>
+    <input name="nimi"  matInput #message maxlength="20" placeholder="Anna nimimerkkisi" [(ngModel)]="name">
+    <mat-hint align="end">{{message.value.length}} / 20</mat-hint>
+  </mat-form-field>
+</form>
+<button mat-raised-button (click)="addScoreboard() ">Lisää pistetauluun</button> <br> 
+</div>
+
+<div *ngIf="dataService.errorMsg!=''">{{dataService.errorMsg}}</div>
+
+
+

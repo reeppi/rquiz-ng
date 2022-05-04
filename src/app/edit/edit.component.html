@@ -1,6 +1,6 @@
 
 <div *ngIf="dataService.questionsData">
-   Visan tunnus : {{ this.quizName }}<br>
+   Visan tunnus : <strong> {{ this.quizName }} </strong><br>
   <form class="example-form">
     <mat-form-field class="example-full-width" appearance="fill">
       <mat-label>Otsikko</mat-label>
@@ -37,18 +37,27 @@
    </mat-radio-group>
 
   <!-- <input size="20" value="" #newOption> -->
+  <table>
+    <tr>
+      <td>
    <button mat-raised-button (click)="addOption('',x);">Lisää vaihtoehto</button> 
+      </td>
+    <td align="right">
    <button mat-raised-button (click)="removeQuestion(x)">Poista kysymys</button> 
+    </td>
+  </table>
 
   </mat-expansion-panel>
 </mat-accordion>
 
-<button mat-raised-button (click)="addQuestion()">Lisää kysymys</button>  
-
-<button mat-raised-button (click)="openQuiz()"> Avaa Visa </button>  
-
+<table width="100%">
+  <tr><td><button mat-raised-button (click)="addQuestion()">Lisää kysymys</button></td>
+    <td align="right"><button mat-raised-button (click)="openQuiz()"> Siirry Visaan </button></td></tr>
+</table>
 
 <br><br>
+
+<div *ngIf="!dataService.loadingQuiz">
 <form class="example-form">
   <form class="example-form">
     <mat-form-field class="example-full-width" appearance="fill">
@@ -63,9 +72,13 @@
   </mat-form-field>
 </form>
 
-<button mat-raised-button (click)="dataService.updateQuestion(quizName)">Tallenna visa</button><br>
-{{ dataService.editErrorMsg }}
+<table width="100%">
+  <tr><td><button mat-raised-button (click)="dataService.updateQuestions(quizName)">Tallenna visa</button></td>
+  <td align="right"><button mat-raised-button (click)="dataService.deleteQuestions(quizName)"> Poista visa</button></td></tr>
+</table>
 
+{{ dataService.editErrorMsg }}
+</div>
 </div>
 <div *ngIf="dataService.loadingQuiz">
   <mat-spinner></mat-spinner>

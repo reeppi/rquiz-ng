@@ -11,6 +11,7 @@ import { DataService } from '../data.service';
 export class MainComponent implements OnInit {
 
   quizName: string ="";
+  errorText: string = "";
   constructor(  private router: Router, public dataService : DataService) { }
 
   ngOnInit(): void {
@@ -18,12 +19,17 @@ export class MainComponent implements OnInit {
 
   quizClick(){
     this.dataService.questionsData = null;
-    this.router.navigateByUrl('/'+this.quizName);
+    if ( this.quizName != "")
+      this.router.navigateByUrl('/'+this.quizName);
+    else 
+      this.errorText ="Anna visan tunnus";
   }
   editClick(){
     this.dataService.questionsData = null;
     if ( this.quizName != "")
-    this.router.navigateByUrl('/'+this.quizName+'/edit');
+      this.router.navigateByUrl('/'+this.quizName+'/edit');
+    else 
+      this.errorText ="Anna visan tunnus";
   }
 
 }

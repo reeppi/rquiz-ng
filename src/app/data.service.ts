@@ -11,11 +11,10 @@ export class DataService {
   public editErrorMsg : string ="";
   public username : string ="";
   public password : string ="";
+  public APIURL: String="";
+  public loadingQuiz : boolean =false;
 
   public online: boolean = false;
-  public APIURL: String="";
-
-  public loadingQuiz : boolean =false;
 
   constructor(){
       this.questionsData = null;
@@ -31,14 +30,43 @@ export class DataService {
     this.questionsData = { name:"", title:"", questions: [] }
   }
 
-  async updateQuestion(quizName: string | null)
+
+  async deleteQuestions(quizName: string | null) 
+  {
+    this.editErrorMsg="";
+    const response = await window.fetch(this.APIURL+"/delete?name="+quizName,
+    { 
+    method: 'get', 
+    headers: new Headers({
+      'Authorization': 'Basic '+btoa(this.username+':'+this.password), 
+      'Content-Type': 'application/json'
+      }),
+    });
+    if (response.ok) {
+      const data  = await response.json();
+      if ( data.hasOwnProperty('error') ) 
+        this.editErrorMsg = data.error;
+      if ( data.hasOwnProperty('done') )
+        {
+          this.editErrorMsg = data.done;
+          if ( this.questionsData) 
+          {
+          this.questionsData.questions = [];
+          this.questionsData.title =""; 
+          }
+        }
+    } else
+      this.editErrorMsg = "Yhteys virhe";
+  }
+
+  async updateQuestions(quizName: string | null)
   { 
     this.loadingQuiz=true;
     this.editErrorMsg="";
     if ( quizName == null) return;
     if ( this.questionsData == null ) return;
     this.questionsData.name=quizName;
-    console.log("update question");
+    console.log("update questions");
     const response = await window.fetch(this.APIURL+"/edit?name="+quizName,
     { 
     method: 'post', 
@@ -54,6 +82,20 @@ export class DataService {
           this.editErrorMsg = data.error;
     }
     this.loadingQuiz=false;
+  }
+
+  async addScoreboard(quizName: string, name: string, score: number) 
+  {
+    console.log("Adding to scoreboard "+name+":"+score);
+    var scoreStr=score.toString();
+    this.errorMsg ="";
+    const response = await window.fetch(this.APIURL+"/addscore?name="+quizName+"&scorename="+name+"&score="+scoreStr);
+    if (response.ok) {
+      const data  = await response.json();
+      if ( data.hasOwnProperty('error') ) 
+          this.errorMsg = data.error;
+    } else
+      this.errorMsg = "Yhteys virhe";
   }
 
   async fetchJsonData(quizName: string, edit: boolean) 
