@@ -17,6 +17,8 @@ export class DataService {
   public online: boolean = false;
 
   constructor(){
+
+      console.log (" :: "+window.location.hostname);
       this.questionsData = null;
       this.scoresData = null;
       if ( this.online == true ) 
