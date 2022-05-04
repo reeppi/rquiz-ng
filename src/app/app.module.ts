@@ -18,6 +18,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MainComponent } from './main/main.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 import {MatTableModule} from '@angular/material/table';
+import { Title } from '@angular/platform-browser';
 
 
 @NgModule({
@@ -52,7 +53,7 @@ import {MatTableModule} from '@angular/material/table';
     ]),
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [Title],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

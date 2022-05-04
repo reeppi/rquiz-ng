@@ -5,6 +5,16 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'rquiz-ng';
+
+
+export class AppComponent  {
+
+  public constructor() {
+
+    
+   }
+   
+  title = 'TIETOVISA';
+
+ 
 }

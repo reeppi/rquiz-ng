@@ -19,6 +19,7 @@ export class ResultsComponent implements OnInit {
   name : string="";
   scoreResult : number=0;
 
+
   getBackGround(q: number, i: number)
   {
     if ( this.dataService.questionsData ) 

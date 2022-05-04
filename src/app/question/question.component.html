@@ -1,4 +1,8 @@
+
+
 <div *ngIf="dataService.questionsData && questionNumber <= dataService.questionsData.questions.length">
+
+    <div style="display: flex; flex-direction: column; justify-content: center;">
     <h4><strong>{{ dataService.questionsData.title}}</strong></h4>
     <p>Kysymys {{ questionNumber }} </p>
     <label id="example-radio-group-label">{{ dataService.questionsData.questions[questionNumber-1].text }}</label>
@@ -6,25 +10,22 @@
         <mat-radio-button (change)="radioChange($event.value)" class="example-radio-button" *ngFor="let option of dataService.questionsData.questions[questionNumber-1].options; index as i" [value]="i">{{option}}</mat-radio-button>
     </mat-radio-group>
     <br>
+    </div>
 
-    <div  style="display: inline" *ngIf="questionNumber > 1">
-        <button mat-raised-button (click)="navClick(-1);">Edellinen</button>    
-    </div>
-    
-    <div  style="display: inline" *ngIf="questionNumber < dataService.questionsData.questions.length">
-        <button mat-raised-button (click)="navClick(1);">Seuraava</button>  
-    </div>
-    
-    <div  style="display: inline" *ngIf="questionNumber == dataService.questionsData.questions.length">
-        <button mat-raised-button (click)="navResults();">Tulokset</button>  
-    </div>
+    <div style="display: inline" *ngIf="questionNumber > 1"><button style="width:50%" mat-raised-button (click)="navClick(-1);">Edellinen</button></div>
+    <div  style="display: inline" *ngIf="questionNumber < dataService.questionsData.questions.length"> <button style="width:50%" mat-raised-button (click)="navClick(1);">Seuraava</button></div>
+    <div  style="display: inline" *ngIf="questionNumber == dataService.questionsData.questions.length"><button style="width:50%" mat-raised-button (click)="navResults();">Tulokset</button></div>
 </div>
+
+
+<div style="justify-content: center; text-align: center; align-items: center;">
 <div *ngIf="dataService.questionsData == null && !dataService.loadingQuiz">
-{{ dataService.errorMsg }}
-<br>
-<button mat-raised-button (click)="newQuizClick();">Luo uusi visa {{this.quizName}}</button>  
-  
+    {{ dataService.errorMsg }}
+    <br>
+    <button style="width:100%" mat-raised-button (click)="newQuizClick();">Luo uusi visa {{this.quizName}}</button>  
 </div>
+
 <div *ngIf="dataService.loadingQuiz">
     <mat-spinner></mat-spinner>
-  </div>
+</div>
+</div>

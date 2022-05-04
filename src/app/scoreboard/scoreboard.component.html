@@ -1,4 +1,6 @@
-<div *ngIf="dataService.scoresData">
+
+<div style="display: flex; justify-content: center;">
+<div *ngIf="dataService.scoresData" >
     <table mat-table [dataSource]="dataService.scoresData.scores" class="mat-elevation-z8">
 
         <ng-container matColumnDef="position">
@@ -25,4 +27,5 @@
 </div>
 <div *ngIf="dataService.loadingQuiz">
     <mat-spinner></mat-spinner>
+</div>
 </div>

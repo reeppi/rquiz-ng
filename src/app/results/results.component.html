@@ -1,5 +1,6 @@
 <div *ngIf="dataService.questionsData">
   <h4><strong>Tulokset</strong></h4>
+  {{ scoreResult  }} / {{ dataService.questionsData.questions.length }}
 <li type="1" *ngFor="let question of dataService.questionsData.questions; index as x">
     <strong>{{question.text}} </strong>
     <div *ngFor="let option of question.options; index as i">
@@ -26,8 +27,8 @@
 <button style="width:100%" mat-raised-button (click)="addScoreboard()">Lisää pistetauluun</button>
 <p><button style="width:100%" mat-raised-button (click)="router.navigateByUrl('/');">Palaa alkuun</button> </p>
 </div>
-
+<div style="text-align: center;">
 <div *ngIf="dataService.errorMsg!=''">{{dataService.errorMsg}}</div>
-
+</div>
 
 

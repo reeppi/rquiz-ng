@@ -1,4 +1,5 @@
 
+
 <div *ngIf="dataService.questionsData">
    <h4>Visa:<strong> {{ this.quizName }} </strong></h4>
   <form class="example-form">
@@ -28,7 +29,8 @@
 
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <input style="width:100%" [(ngModel)]="question.text" placeholder="Kirjoita kysymys" >
+    <textarea style="width:100%" [(ngModel)]="question.text" placeholder="Kirjoita kysymys">fff</textarea>
+
     <mat-radio-group [(ngModel)]="question.true" aria-labelledby="example-radio-group-label" class="example-radio-group">
       <mat-radio-button class="example-radio-button" *ngFor="let option of question.options; index as i" [value]="i">
         <input size="20" [value]="question.options[i]" (change)="optionChanged($event,i,x)">
@@ -50,10 +52,9 @@
   </mat-expansion-panel>
 </mat-accordion>
 
-<table width="100%">
-  <tr><td><button mat-raised-button (click)="addQuestion()">Lisää kysymys</button></td>
-    <td align="right"><button mat-raised-button (click)="openQuiz()"> Siirry Visaan </button></td></tr>
-</table>
+
+    <button style="width:70%"  mat-raised-button (click)="addQuestion()">Lisää kysymys</button>
+    <button style="width:30%" mat-raised-button (click)="openQuiz()"> Siirry Visaan </button>
 
 <br><br>
 
@@ -72,14 +73,18 @@
   </mat-form-field>
 </form>
 
-<table width="100%">
-  <tr><td><button mat-raised-button (click)="dataService.updateQuestions(quizName)">Tallenna visa</button></td>
-  <td align="right"><button mat-raised-button (click)="dataService.deleteQuestions(quizName)"> Poista visa</button></td></tr>
-</table>
+<button style="width:70%" mat-raised-button (click)="dataService.updateQuestions(quizName)">Tallenna visa</button>
+<button style="width:30%"  mat-raised-button (click)="dataService.deleteQuestions(quizName)"> Poista visa</button>
 
+<div style="text-align: center;">
 {{ dataService.editErrorMsg }}
 </div>
+
 </div>
+</div>
+
+<div style="display:flex; justify-content: center;">
 <div *ngIf="dataService.loadingQuiz">
   <mat-spinner></mat-spinner>
+</div>
 </div>
