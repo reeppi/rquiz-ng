@@ -13,18 +13,16 @@ export class DataService {
   public password : string ="";
   public APIURL: String="";
   public loadingQuiz : boolean =false;
-
   public online: boolean = false;
 
   constructor(){
-
       console.log (" :: "+window.location.hostname);
       this.questionsData = null;
       this.scoresData = null;
-      if ( this.online == true ) 
+      this.APIURL = "http://localhost:8888";
+      if (  window.location.hostname== "tietovisa.netlify.app" ) 
           this.APIURL = "https://reeppi-quiz.netlify.app";
-      else 
-          this.APIURL = "http://localhost:8888";
+      console.log("APIURL : "+ this.APIURL);
   }
 
   createNewQuiz() {
