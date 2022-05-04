@@ -1,24 +1,30 @@
 <div *ngIf="dataService.questionsData">
+  <h4><strong>Tulokset</strong></h4>
 <li type="1" *ngFor="let question of dataService.questionsData.questions; index as x">
     <strong>{{question.text}} </strong>
-    <div *ngFor="let option of question.options; index as i" [style.background-color]="getBackGround(x,i)">{{option}} </div>  
+    <div *ngFor="let option of question.options; index as i">
+      <div *ngIf="question.true == i || question.answer == i " [style.background-color]="getBackGround(x,i)">
+      {{option}} 
+      </div>
+    </div>  
   </li>
 </div>
-
-
 <div *ngIf="dataService.loadingQuiz">
   <mat-spinner></mat-spinner>
 </div>
 
+
 <div *ngIf="!dataService.loadingQuiz && dataService.questionsData">
-<form class="example-form">
-  <mat-form-field class="example-full-width" appearance="fill">
+  <form class="example-form">
+  <mat-form-field style="width:100%" class="example-full-width" appearance="fill">
     <mat-label>Nimimerkki</mat-label>
-    <input name="nimi"  matInput #message maxlength="20" placeholder="Anna nimimerkkisi" [(ngModel)]="name">
+    <input  name="nimi"  matInput #message maxlength="20" placeholder="Anna nimimerkkisi" [(ngModel)]="name">
     <mat-hint align="end">{{message.value.length}} / 20</mat-hint>
   </mat-form-field>
 </form>
-<button mat-raised-button (click)="addScoreboard() ">Lisää pistetauluun</button> <br> 
+
+<button style="width:100%" mat-raised-button (click)="addScoreboard()">Lisää pistetauluun</button>
+<p><button style="width:100%" mat-raised-button (click)="router.navigateByUrl('/');">Palaa alkuun</button> </p>
 </div>
 
 <div *ngIf="dataService.errorMsg!=''">{{dataService.errorMsg}}</div>

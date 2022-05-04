@@ -13,7 +13,7 @@ export class ResultsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, 
     public dataService : DataService,
-     private router: Router) { }
+     public router: Router) { }
 
   public quizName :string | null = "";
   name : string="";

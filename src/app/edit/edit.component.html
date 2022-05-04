@@ -1,6 +1,6 @@
 
 <div *ngIf="dataService.questionsData">
-   Visan tunnus : <strong> {{ this.quizName }} </strong><br>
+   <h4>Visa:<strong> {{ this.quizName }} </strong></h4>
   <form class="example-form">
     <mat-form-field class="example-full-width" appearance="fill">
       <mat-label>Otsikko</mat-label>
@@ -28,7 +28,7 @@
 
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <input size="50" [(ngModel)]="question.text" placeholder="Kirjoita kysymys" >
+    <input style="width:100%" [(ngModel)]="question.text" placeholder="Kirjoita kysymys" >
     <mat-radio-group [(ngModel)]="question.true" aria-labelledby="example-radio-group-label" class="example-radio-group">
       <mat-radio-button class="example-radio-button" *ngFor="let option of question.options; index as i" [value]="i">
         <input size="20" [value]="question.options[i]" (change)="optionChanged($event,i,x)">
@@ -60,15 +60,15 @@
 <div *ngIf="!dataService.loadingQuiz">
 <form class="example-form">
   <form class="example-form">
-    <mat-form-field class="example-full-width" appearance="fill">
+    <mat-form-field  class="example-full-width" appearance="fill">
       <mat-label>Käyttäjätunnus</mat-label>
-      <input name="user" matInput #message maxlength="50" placeholder="Anna käyttäjätunnus" [(ngModel)]="dataService.username">
+      <input name="user"  matInput #message maxlength="20" placeholder="Anna käyttäjätunnus" [(ngModel)]="dataService.username">
     </mat-form-field>
   </form>
 
   <mat-form-field class="example-full-width" appearance="fill">
     <mat-label>Salasana</mat-label>
-    <input type="password" name="password" matInput #message maxlength="50" placeholder="Anna salasana" [(ngModel)]="dataService.password">
+    <input type="password" name="password" matInput #message maxlength="20" placeholder="Anna salasana" [(ngModel)]="dataService.password">
   </mat-form-field>
 </form>
 

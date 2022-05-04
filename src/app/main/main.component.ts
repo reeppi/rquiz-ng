@@ -17,19 +17,37 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  scoreBoardClick()
+  {
+    this.dataService.questionsData = null;
+    if ( this.quizName != "")
+      this.router.navigateByUrl('/'+this.quizName+'/scores');
+    else 
+     {
+      setTimeout(() => { this.errorText =""}, 5000);
+      this.errorText ="Anna visan tunnus";
+     }
+  }
+
   quizClick(){
     this.dataService.questionsData = null;
     if ( this.quizName != "")
       this.router.navigateByUrl('/'+this.quizName);
     else 
+    {
+      setTimeout(() => { this.errorText =""}, 5000);
       this.errorText ="Anna visan tunnus";
+    }
   }
   editClick(){
     this.dataService.questionsData = null;
     if ( this.quizName != "")
       this.router.navigateByUrl('/'+this.quizName+'/edit');
     else 
+    {
+      setTimeout(() => { this.errorText =""}, 5000);
       this.errorText ="Anna visan tunnus";
+    }
   }
 
 }

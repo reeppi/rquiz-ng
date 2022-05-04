@@ -1,5 +1,5 @@
 <div *ngIf="dataService.questionsData && questionNumber <= dataService.questionsData.questions.length">
-    <p><strong>{{ dataService.questionsData.title}}</strong></p>
+    <h4><strong>{{ dataService.questionsData.title}}</strong></h4>
     <p>Kysymys {{ questionNumber }} </p>
     <label id="example-radio-group-label">{{ dataService.questionsData.questions[questionNumber-1].text }}</label>
     <mat-radio-group [(ngModel)]="radioIndex" aria-labelledby="example-radio-group-label" class="example-radio-group">
