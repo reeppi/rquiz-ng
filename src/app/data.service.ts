@@ -14,6 +14,7 @@ export class DataService {
   public APIURL: String="";
   public loadingQuiz : boolean =false;
   public online: boolean = false;
+  public title = "TIETOVISA";
 
   constructor(){
       console.log (" :: "+window.location.hostname);

@@ -15,6 +15,10 @@ export class MainComponent implements OnInit {
   constructor(  private router: Router, public dataService : DataService) { }
 
   ngOnInit(): void {
+
+    if ( this.dataService.questionsData != null )
+      this.quizName = this.dataService.questionsData.name;
+    
   }
 
   scoreBoardClick()

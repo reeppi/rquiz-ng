@@ -3,6 +3,7 @@ import { ActivatedRoute  } from '@angular/router';
 import { DataService } from '../data.service';
 import * as Models from "../data.models";
 import { Router } from '@angular/router';
+import { BrowserModule, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-edit',
@@ -13,7 +14,8 @@ export class EditComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, 
     public dataService : DataService,
-     private router: Router) { }
+     private router: Router,
+     private title:Title) { }
 
   public quizName :string | null = "";
   panelOpenState = false;

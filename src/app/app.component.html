@@ -59,12 +59,20 @@
   a,
   a:visited,
   a:hover {
-    color: #1976d2;
+    color: #ffffff;
     text-decoration: none;
   }
 
+  .author a,
+  .author a:visited,
+  .author a:hover {
+    color: #042ea3;
+    text-decoration: none;
+  }
+
+
   a:hover {
-    color: #125699;
+    color: #007dfa;
   }
 
   footer {
@@ -94,8 +102,9 @@
 
 <div class="toolbar"  role="banner">
 
-  <img alt="fff" [src]="'assets/images/icon.png'">
-  <span><h2>TIETOVISA</h2></span>
+  <a [routerLink]="['/']"><img alt="fff" [src]="'assets/images/icon.png'"></a>
+  <a [routerLink]="['/']"><span><h2>TIETOVISA</h2></span></a>
+  
 </div>
 
 <div class="content" role="main">
@@ -107,7 +116,7 @@
   <router-outlet></router-outlet>
   </div>
   <hr width="100%">
-  <div style="text-align: center;">
+  <div style="text-align: center;" class="author">
   author: <a href="mailto:tuomas.kokki@outlook.com">T.K</a>
   </div>
 </div>

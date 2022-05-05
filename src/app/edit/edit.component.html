@@ -39,15 +39,9 @@
    </mat-radio-group>
 
   <!-- <input size="20" value="" #newOption> -->
-  <table>
-    <tr>
-      <td>
-   <button mat-raised-button (click)="addOption('',x);">Lisää vaihtoehto</button> 
-      </td>
-    <td align="right">
-   <button mat-raised-button (click)="removeQuestion(x)">Poista kysymys</button> 
-    </td>
-  </table>
+   <button mat-raised-button style="width:70%"  (click)="addOption('',x);">Lisää vaihtoehto</button> 
+   <button mat-raised-button style="width:30%"  (click)="removeQuestion(x)">Poista kysymys</button> 
+
 
   </mat-expansion-panel>
 </mat-accordion>
