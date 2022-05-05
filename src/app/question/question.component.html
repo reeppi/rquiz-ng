@@ -24,8 +24,7 @@
     <br>
     <button style="width:100%" mat-raised-button (click)="newQuizClick();">Luo uusi visa {{this.quizName}}</button>  
 </div>
-
-<div *ngIf="dataService.loadingQuiz">
-    <mat-spinner></mat-spinner>
 </div>
+<div *ngIf="dataService.loadingQuiz" style="display:flex; justify-content: center;">
+    <mat-spinner></mat-spinner>
 </div>

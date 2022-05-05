@@ -12,7 +12,7 @@ export class ScoreboardComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, 
     public dataService : DataService,
-    private router: Router
+    public router: Router
     ) { }
   
   public quizName :string | null = "";
@@ -24,11 +24,9 @@ export class ScoreboardComponent implements OnInit {
     this.quizName= routeParams.get('quizName');
     if ( this.quizName ) 
       {
-    //  if ( this.dataService.scoresData == null )
-    //  {
+     //if ( this.dataService.scoresData == null )
         this.dataService.fetchScores(this.quizName);
-     // }
-    }
+      }
   }
 
 }

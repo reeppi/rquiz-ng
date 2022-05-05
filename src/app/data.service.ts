@@ -106,6 +106,7 @@ export class DataService {
     //this.questionsData = null;
     //this.createNewQuiz(); 
    
+    
     this.loadingQuiz=true;
     const response = await window.fetch(this.APIURL+"/quiz?name="+quizName);
     this.loadingQuiz=false;
