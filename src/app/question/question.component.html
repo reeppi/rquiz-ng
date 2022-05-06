@@ -12,7 +12,7 @@
 </div>
 
 <div  style="display: inline" *ngIf="questionNumber < dataService.questionsData.questions.length"><p> <button style="width:100%" mat-raised-button (click)="navClick(1);">Seuraava</button></p></div>
-<div  style="display: inline" *ngIf="questionNumber == dataService.questionsData.questions.length"><p><button style="width:100%" mat-raised-button (click)="navResults();">Siirry tuloksiin</button></p></div>
+<div  style="display: inline" *ngIf="questionNumber == dataService.questionsData.questions.length"><p><button style="width:100%" mat-raised-button (click)="navResults();">Siirry vastauksiin</button></p></div>
 <div style="display: inline" *ngIf="questionNumber > 1"><p><button style="width:100%" mat-raised-button (click)="navClick(-1);">Edellinen</button></p></div>
 
 </div>
@@ -20,6 +20,7 @@
 
 <div style="justify-content: center; text-align: center; align-items: center;">
 <div *ngIf="dataService.questionsData == null && !dataService.loadingQuiz">
+    <br><br>
     {{ dataService.errorMsg }}
     <br>
     <button style="width:100%" mat-raised-button (click)="newQuizClick();">Luo uusi visa {{this.quizName}}</button>  
