@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { DataService } from './data.service';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +12,12 @@ import { Component } from '@angular/core';
 
 export class AppComponent  {
 
-  public constructor() {
+  public constructor(private route: ActivatedRoute,  private router: Router, private dataservice : DataService) {
 
-    
    }
-   
+
+
+  
   title = 'TIETOVISA';
 
  

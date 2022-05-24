@@ -4,6 +4,7 @@ import { DataService } from '../data.service';
 import * as Models from "../data.models";
 import { Router } from '@angular/router';
 import { BrowserModule, Title } from '@angular/platform-browser';
+import {MatDialog,MatDialogConfig,MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit',
@@ -14,14 +15,15 @@ export class EditComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, 
     public dataService : DataService,
-     private router: Router,
-     private title:Title) { }
+     public router: Router,
+     private title:Title,
+     public dialog: MatDialog) { }
 
   public quizName :string | null = "";
   panelOpenState = false;
 
   ngOnInit(): void {
-
+    this.dataService.editErrorMsg = "";
     const routeParams = this.route.snapshot.paramMap;
     this.quizName= routeParams.get('quizName');
     if ( this.quizName ) 
@@ -49,7 +51,6 @@ export class EditComponent implements OnInit {
   {
     this.router.navigateByUrl('/'+this.quizName);
   }
-
   
   addQuestion()
   {
@@ -76,5 +77,29 @@ export class EditComponent implements OnInit {
     if ( this.dataService.questionsData == null ) return;
    this.dataService.questionsData?.questions.splice(index,1);
   }
+
+  deleteQuestions() {
+    const dialogRef = this.dialog.open(deleteQuestionsComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if ( result ) 
+          this.dataService.deleteQuestions(this.quizName);
+      });
+  }
+
+}
+
+@Component({
+  selector: 'delete-dialog',
+  templateUrl: './delete-dialog.html',
+})
+export class deleteQuestionsComponent {
+  constructor(public dialogRef: MatDialogRef<deleteQuestionsComponent>) {}
+  cancel() {
+    this.dialogRef.close(false);
+  }
+  delete() {
+    this.dialogRef.close(true);
+  }
+
 
 }

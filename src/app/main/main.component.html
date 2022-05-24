@@ -1,15 +1,46 @@
-<form class="example-form">
-    <mat-form-field class="example-full-width" appearance="fill">
+  <div>
+    <mat-form-field style="width:60%" appearance="fill">
       <mat-label>Visan tunnus</mat-label>
       <input name="nimi"  matInput  maxlength="256" placeholder="Anna visan tunnus" [(ngModel)]="quizName">
     </mat-form-field>
-  </form>
+    <mat-form-field style="width:40%" appearance="fill" (click)="listClick()">
+      <mat-label>Omat visasi</mat-label>
+      <mat-select #selectQuiz   (selectionChange)="changeList($event.value);">
+        <mat-option [value]="quiz" *ngFor="let quiz of dataService.listQuizData; ">{{quiz}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+</div>
 
+<mat-accordion>
+  <mat-expansion-panel (opened)="dataService.fetchListQuestions()">
+    <mat-expansion-panel-header>
+      <mat-panel-description>
+        Luettelo julkisista visoista
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div *ngIf="dataService.listQuestionsData != null">
+      <li *ngFor="let q of dataService.listQuestionsData"><a href="#" (click)="listQuizClick(q)">{{q?.name}}</a></li>
+    </div>
+    <div *ngIf="dataService.listQuestionsData == null">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<br>
   <div style="text-align: center;">
-  <button style="width:100%" mat-raised-button (click)="quizClick();">Avaa visa</button> 
-<p><button style="width:100%" mat-raised-button (click)="editClick();">Luo/Muokkaa visaa</button> </p>
- <p><button style="width:100%" mat-raised-button (click)="scoreBoardClick();">Avaa visan pistetaulu</button></p>
+  <button style="width:70%" color="primary" mat-raised-button (click)="quizClick();">Avaa visa {{this.quizName}}</button> 
+  <button style="width:30%" mat-raised-button (click)="scoreBoardClick();">Pistetaulu</button>
+ <p><button style="width:100%" mat-raised-button (click)="editClick();">Luo/Muokkaa visaa {{this.quizName}}</button> </p>
+ <p>
+   <button style="width:50%" mat-raised-button (click)="loginGoogle();"><img [src]="'assets/images/google_logo.png'"/> Kirjaudu Googlella</button>
+   <button style="width:50%" mat-raised-button (click)="loginFacebook();"><img [src]="'assets/images/facebook_logo.png'"/> Kirjaudu Facebookilla</button>
+</p>
+ <!-- <p><button style="width:100%" mat-raised-button (click)="dataService.profileTest();">profileTest</button></p> -->
+ Vain kirjautuneena voit luoda omia visoja ja lisätä nimesi visan pistetauluun.<br>
+
+ <strong>
   {{ errorText }}
+  {{ dataService.errorMsg }}</strong>
   </div>
 
   

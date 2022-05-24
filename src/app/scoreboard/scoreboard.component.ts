@@ -10,7 +10,8 @@ import { Router } from '@angular/router';
 })
 export class ScoreboardComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, 
+  constructor(
+    private route: ActivatedRoute, 
     public dataService : DataService,
     public router: Router
     ) { }

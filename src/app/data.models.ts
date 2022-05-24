@@ -1,9 +1,16 @@
+export type listQuestionsType = {
+  name: string;
+  title: string;
+  cat: string;
+} | null
+
 export type questionsType = {
     name: string;
     title: string;
     questions: Array<questionType>
+    public: boolean;
   } | null
-  
+
 export type questionType = {   
     text: string;
     options: Array<string>

@@ -20,7 +20,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-      <p><button style="width:100%" mat-raised-button (click)="router.navigateByUrl('/');">Palaa alkuun</button> </p>
+      <p><button style="width:100%" mat-raised-button (click)="router.navigateByUrl('/');">Palaa etusivulle</button> </p>
 </div>
 <div *ngIf="dataService.scoresData == null && !dataService.loadingQuiz">
 {{ dataService.errorMsg }} <br>

@@ -52,8 +52,8 @@ export class ResultsComponent implements OnInit {
   {
     if (this.dataService.questionsData  == null) return;
     if ( this.quizName == null) return;
-      await this.dataService.addScoreboard(this.quizName,this.name,this.scoreResult);
-    console.log("------"+this.dataService.errorMsg);
+    
+    await this.dataService.addScoreboard(this.quizName,this.name,this.scoreResult);
     if ( this.dataService.errorMsg == "") 
       this.router.navigateByUrl('/'+this.quizName+'/scores');
   }

@@ -19,6 +19,12 @@ import { MainComponent } from './main/main.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 import {MatTableModule} from '@angular/material/table';
 import { Title } from '@angular/platform-browser';
+import { CookieService } from 'ngx-cookie-service';
+import { MatSelectModule } from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDialogModule} from '@angular/material/dialog'; 
+import { deleteQuestionsComponent } from './edit/edit.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -29,6 +35,8 @@ import { Title } from '@angular/platform-browser';
     EditComponent,
     MainComponent,
     ScoreboardComponent,
+    deleteQuestionsComponent
+    
   ],
   imports: [
     FormsModule,
@@ -42,9 +50,14 @@ import { Title } from '@angular/platform-browser';
     MatInputModule,
     MatProgressSpinnerModule,
     MatTableModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatProgressBarModule,
     
     RouterModule.forRoot([
       { path: '', component: MainComponent },
+      { path: ':quizName/test', component: MainComponent },
       { path: ':quizName/edit', component: EditComponent },
       { path: ':quizName/results', component: ResultsComponent },
       { path: ':quizName/scores', component: ScoreboardComponent },
@@ -53,7 +66,7 @@ import { Title } from '@angular/platform-browser';
     ]),
     BrowserAnimationsModule
   ],
-  providers: [Title],
+  providers: [Title, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
