@@ -55,7 +55,7 @@
   <hr style="color:silver;border-top: 1px" width="100%">
 <button style="width:70%" color="primary" mat-raised-button (click)="dataService.updateQuestions(quizName)"><mat-icon>save</mat-icon> Tallenna visa</button>
 <button style="width:30%"  mat-raised-button (click)="deleteQuestions()"> Poista visa</button>
-<div style="display:flex; justify-content: center;">Muistathan kirjautua etusivulla ennen visan luontia!</div>
+<div *ngIf="!dataService.getLoggedIn()" style="display:flex; justify-content: center;">Kirjaudu etusivulla ennen visan luontia!</div>
 
 <div style="text-align: center;">
 <strong>{{ dataService.editErrorMsg }}</strong>

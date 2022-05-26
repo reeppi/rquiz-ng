@@ -36,7 +36,7 @@
    <button style="width:50%" mat-raised-button (click)="loginFacebook();"><img [src]="'assets/images/facebook_logo.png'"/> Kirjaudu Facebookilla</button>
 </p>
  <!-- <p><button style="width:100%" mat-raised-button (click)="dataService.profileTest();">profileTest</button></p> -->
- Vain kirjautuneena voit luoda omia visoja ja lisätä nimesi visan pistetauluun.<br>
+ <div *ngIf="!dataService.getLoggedIn()">Vain kirjautuneena voit luoda omia visoja ja lisätä nimesi visan pistetauluun.<br></div>
 
  <strong>
   {{ errorText }}
