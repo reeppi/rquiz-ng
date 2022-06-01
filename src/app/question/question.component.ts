@@ -76,7 +76,7 @@ export class QuestionComponent implements OnInit {
     var imageName: string=this.dataService.questionsData.questions[qNumber-1].image;
     var image:string="https://tietovisa.s3.eu-north-1.amazonaws.com/"+this.quizName+"/"+imageName;
     console.log("image "+image);
-    const dialogRef = this.dialog.open(imageComponent,{ data: { image }});
+    const dialogRef = this.dialog.open(imageComponent,{  data: { image }});
     dialogRef.afterClosed().subscribe(result => {});
   }
 
@@ -85,6 +85,8 @@ export class QuestionComponent implements OnInit {
 @Component({
   selector: 'image-dialog',
   templateUrl: './image-dialog.html',
+  styleUrls: ['./question.component.css']
+
 })
 export class imageComponent {
   constructor(public dialogRef: MatDialogRef<imageComponent>, @Inject(MAT_DIALOG_DATA) public data: { image:string }) {
