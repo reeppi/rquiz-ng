@@ -62,6 +62,7 @@ export class QuestionComponent implements OnInit {
     this.quizName= routeParams.get('quizName');
     if ( this.quizName ) 
       {
+        this.quizName=this.quizName.toLowerCase()
       if ( this.dataService.questionsData == null )
       {
         this.dataService.fetchJsonData(this.quizName,false);

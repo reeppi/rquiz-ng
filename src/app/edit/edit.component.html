@@ -12,11 +12,11 @@
   
 
 <mat-accordion>
-  <mat-expansion-panel  *ngFor="let question of dataService.questionsData.questions; index as x" (opened)="statePanel.value = '1'" (closed)="statePanel.value = '0'">
+  <mat-expansion-panel  *ngFor="let question of dataService.questionsData.questions; index as x" (opened)="statePanel.value = '1'; selQuestion=x;" (closed)="statePanel.value = '0'">
     <input type="hidden" [value]="'0'" #statePanel>
     <mat-expansion-panel-header>
       <mat-panel-title>
-
+    
         <div *ngIf="question.text!=''">
         {{ (x+1) }}. {{ question.text }}
         </div>
@@ -31,6 +31,10 @@
     </mat-expansion-panel-header>
     <textarea style="width:100%" [(ngModel)]="question.text" placeholder="Kirjoita kysymys">fff</textarea>
 
+    <div *ngIf="question.image!= null && question.image!='' " style="display:flex; justify-content: center;">
+      <img (click)="removeImage(x)" src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{question.image}}">
+    </div>
+    <!--Kuva: {{ question.image }}<br>-->
     <mat-radio-group [(ngModel)]="question.true" aria-labelledby="example-radio-group-label" class="example-radio-group">
       <mat-radio-button class="example-radio-button" *ngFor="let option of question.options; index as i" [value]="i">
         <input size="20" [value]="question.options[i]" (change)="optionChanged($event,i,x)">
@@ -43,13 +47,25 @@
    <button mat-raised-button style="width:30%"  (click)="removeQuestion(x)">Poista kysymys</button> 
   </mat-expansion-panel>
 </mat-accordion>
-
 <p>
-    <button style="width:70%"  mat-raised-button (click)="addQuestion()">Lisää kysymys</button>
+    <button style="width:70%"  color="primary"  mat-raised-button (click)="addQuestion()">Lisää kysymys</button>
     <button style="width:30%" mat-raised-button (click)="openQuiz()"> Avaa visa </button>
   </p>
 
+  <div *ngIf="uploadingImage">
+    <mat-progress-bar mode="determinate" [value]="uploadingProgress"></mat-progress-bar>
+  </div>
+
+  <div *ngIf="!uploadingImage">
+    <input type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)" #fileUpload>
+    <div class="file-upload">
+      {{fileName || "Ei tiedostoa "}}
+     <button mat-raised-button class="upload-btn" (click)="fileUpload.click()">Lisää kuva kysymykseen nro. {{selQuestion+1 }}</button>
+    </div>
+  </div>
+  
 <p><mat-checkbox class="example-margin" [(ngModel)]="dataService.questionsData.public">Visa näkyy etusivulla luettelossa</mat-checkbox></p>
+
 
 <div *ngIf="!dataService.loadingQuiz">
   <hr style="color:silver;border-top: 1px" width="100%">

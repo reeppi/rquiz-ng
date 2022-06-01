@@ -5,9 +5,23 @@
     <div style="display: flex; flex-direction: column; justify-content: center;">
     <h4><strong>{{ dataService.questionsData.title}}</strong></h4>
     <label id="example-radio-group-label">{{ questionNumber }}. {{ dataService.questionsData.questions[questionNumber-1].text }}</label>
+
+    <div style="display:flex; border:1px; justify-content:space-between;">
+
+        <div>
     <mat-radio-group [(ngModel)]="radioIndex" aria-labelledby="example-radio-group-label" class="example-radio-group">
         <mat-radio-button (change)="radioChange($event.value)" class="example-radio-button" *ngFor="let option of dataService.questionsData.questions[questionNumber-1].options; index as i" [value]="i">{{option}}</mat-radio-button>
     </mat-radio-group>
+        </div>
+
+    <div *ngIf="dataService.questionsData.questions[questionNumber-1].image != null && dataService.questionsData.questions[questionNumber-1].image!='' ">
+       <br>
+        <img  src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{dataService.questionsData.questions[questionNumber-1].image}}">
+    </div>
+
+    </div>
+
+
     <br>
 </div>
 

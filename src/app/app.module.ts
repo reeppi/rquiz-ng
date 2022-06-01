@@ -25,7 +25,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDialogModule} from '@angular/material/dialog'; 
 import { deleteQuestionsComponent } from './edit/edit.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -41,6 +41,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
   imports: [
     FormsModule,
     BrowserModule,
+    HttpClientModule,
     MatRadioModule,
     MatButtonModule,
     MatExpansionModule,

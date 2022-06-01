@@ -198,9 +198,9 @@ export class DataService {
 
   getLoggedIn() : Boolean {
     var token = window.sessionStorage.getItem("JWT");
-    console.log("JWT TOKEN : "+ token);
     if ( token== null) return false; else return true;
   }
+  
   async getToken(code : string)
   {
     this.errorMsg ="";

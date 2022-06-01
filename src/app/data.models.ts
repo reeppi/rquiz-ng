@@ -13,6 +13,7 @@ export type questionsType = {
 
 export type questionType = {   
     text: string;
+    image: string;
     options: Array<string>
     true: number;
     answer: number | null;
