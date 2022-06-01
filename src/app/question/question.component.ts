@@ -1,9 +1,11 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit,Inject} from '@angular/core';
 import { ActivatedRoute  } from '@angular/router';
 import { DataService } from '../data.service';
 import * as Models from "../data.models";
 import { MatRadioButton } from '@angular/material/radio';
 import { Router } from '@angular/router';
+import {MatDialog,MatDialogConfig,MatDialogRef } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 
 @Component({
@@ -16,7 +18,8 @@ export class QuestionComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, 
     public dataService : DataService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
     ) { }
 
   public questionNumber: number = 1;
@@ -51,8 +54,6 @@ export class QuestionComponent implements OnInit {
       this.dataService.questionsData.questions[this.questionNumber-1].answer=value;
   }
 
-
-
   ngOnInit(): void {
     const routeParams = this.route.snapshot.paramMap;
     this.route.params.subscribe(routeParams => {
@@ -68,6 +69,29 @@ export class QuestionComponent implements OnInit {
         this.dataService.fetchJsonData(this.quizName,false);
       }
     }
+  }
+
+  openImage(qNumber:number) {
+    if ( this.dataService.questionsData == null ) return;
+    var imageName: string=this.dataService.questionsData.questions[qNumber-1].image;
+    var image:string="https://tietovisa.s3.eu-north-1.amazonaws.com/"+this.quizName+"/"+imageName;
+    console.log("image "+image);
+    const dialogRef = this.dialog.open(imageComponent,{ data: { image }});
+    dialogRef.afterClosed().subscribe(result => {});
+  }
+
+}
+
+@Component({
+  selector: 'image-dialog',
+  templateUrl: './image-dialog.html',
+})
+export class imageComponent {
+  constructor(public dialogRef: MatDialogRef<imageComponent>, @Inject(MAT_DIALOG_DATA) public data: { image:string }) {
+
+  }
+  close() {
+    this.dialogRef.close(false);
   }
 
 }

@@ -8,16 +8,24 @@
 
     <div style="display:flex; border:1px; justify-content:space-between;">
 
-        <div>
-    <mat-radio-group [(ngModel)]="radioIndex" aria-labelledby="example-radio-group-label" class="example-radio-group">
-        <mat-radio-button (change)="radioChange($event.value)" class="example-radio-button" *ngFor="let option of dataService.questionsData.questions[questionNumber-1].options; index as i" [value]="i">{{option}}</mat-radio-button>
-    </mat-radio-group>
+        <div style="width:max-content" >
+            <mat-radio-group [(ngModel)]="radioIndex" aria-labelledby="example-radio-group-label" class="example-radio-group">
+            <mat-radio-button (change)="radioChange($event.value)" class="example-radio-button" *ngFor="let option of dataService.questionsData.questions[questionNumber-1].options; index as i" [value]="i">
+                <span style="white-space: normal;">{{option}}</span>
+            </mat-radio-button>
+            </mat-radio-group>
         </div>
-
-    <div *ngIf="dataService.questionsData.questions[questionNumber-1].image != null && dataService.questionsData.questions[questionNumber-1].image!='' ">
-       <br>
-        <img  src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{dataService.questionsData.questions[questionNumber-1].image}}">
+    
+    <div style="width:{{dataService.questionsData.questions[questionNumber-1].width/2}}px"  *ngIf="dataService.questionsData.questions[questionNumber-1].image != null && dataService.questionsData.questions[questionNumber-1].image!='' ">
+        <br>
+            <a (click)="openImage(questionNumber)">
+            <img  src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{dataService.questionsData.questions[questionNumber-1].image}}" class="small">
+            </a>
     </div>
+
+<!--    <div id="largeId" class="large">
+        <div class="large-content"><a href="#"><img  src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{dataService.questionsData.questions[questionNumber-1].image}}"></a></div>
+    </div>-->
 
     </div>
 

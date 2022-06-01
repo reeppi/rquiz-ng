@@ -26,6 +26,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { deleteQuestionsComponent } from './edit/edit.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
+import { imageComponent } from './question/question.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { HttpClientModule } from '@angular/common/http';
     EditComponent,
     MainComponent,
     ScoreboardComponent,
-    deleteQuestionsComponent
+    deleteQuestionsComponent,
+    imageComponent
     
   ],
   imports: [

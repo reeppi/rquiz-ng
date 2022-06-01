@@ -31,9 +31,11 @@
     </mat-expansion-panel-header>
     <textarea style="width:100%" [(ngModel)]="question.text" placeholder="Kirjoita kysymys">fff</textarea>
 
-    <div *ngIf="question.image!= null && question.image!='' " style="display:flex; justify-content: center;">
-      <img (click)="removeImage(x)" src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{question.image}}">
+    <div style="display:flex; justify-content: center;">
+    <div *ngIf="question.image!= null && question.image!='' " style="width:{{question.width/2}}px">
+      <img style="width:100%" (click)="removeImage(x)" src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{question.image}}">
     </div>
+  </div>
     <!--Kuva: {{ question.image }}<br>-->
     <mat-radio-group [(ngModel)]="question.true" aria-labelledby="example-radio-group-label" class="example-radio-group">
       <mat-radio-button class="example-radio-button" *ngFor="let option of question.options; index as i" [value]="i">

@@ -89,7 +89,11 @@ export class EditComponent implements OnInit {
               if ( event.body.hasOwnProperty('done'))
               {
                  if ( this.dataService.questionsData != null ) 
-                    this.dataService.questionsData.questions[this.selQuestion].image=event.body.done;  
+                 {
+                    this.dataService.questionsData.questions[this.selQuestion].image=event.body.done; 
+                    this.dataService.questionsData.questions[this.selQuestion].width=event.body.width;
+                    this.dataService.questionsData.questions[this.selQuestion].height=event.body.height;
+                 }
               }
             }
           }
@@ -118,7 +122,7 @@ export class EditComponent implements OnInit {
   {
     if ( this.dataService.questionsData == null ) return;
     let question : Models.questionType;
-    question = { text: "", options:[], true:0, image:"", answer:null };
+    question = { text: "", options:[], true:0, image:"", width:0, height:0, answer:null };
     this.dataService.questionsData.questions.push(question);
     this.selQuestion=this.dataService.questionsData.questions.length-1;
   }
@@ -163,6 +167,4 @@ export class deleteQuestionsComponent {
   delete() {
     this.dialogRef.close(true);
   }
-
-
 }
