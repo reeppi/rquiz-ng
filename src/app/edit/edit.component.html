@@ -45,8 +45,17 @@
    </mat-radio-group>
    
   <!-- <input size="20" value="" #newOption> -->
-   <button mat-raised-button style="width:65%"  (click)="addOption('',x);">Lisää vaihtoehto</button> 
-   <button mat-raised-button style="width:35%"  (click)="removeQuestion(x)">Poista kysymys</button> 
+   <button mat-raised-button color="primary" style="width:55%"  (click)="addOption('',x);">Lisää vaihtoehto</button> 
+   <button mat-raised-button style="width:45%"  (click)="removeQuestion(x)">Poista kysymys</button> 
+
+   <br><br>
+   <div *ngIf="uploadingImage">
+    <mat-progress-bar mode="determinate" [value]="uploadingProgress"></mat-progress-bar>
+  </div>
+  <div *ngIf="!uploadingImage">
+    <div class="file-upload"><button mat-raised-button  color="primary"  class="upload-btn" (click)="fileUpload.click()">Lisää kuva kysymykseen</button></div>
+  </div>
+
   </mat-expansion-panel>
 </mat-accordion>
 <p>
@@ -54,18 +63,19 @@
     <button style="width:30%" mat-raised-button (click)="openQuiz()"> Avaa visa </button>
   </p>
 
+  <!--
   <div *ngIf="uploadingImage">
     <mat-progress-bar mode="determinate" [value]="uploadingProgress"></mat-progress-bar>
   </div>
-
   <div *ngIf="!uploadingImage">
     <input type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)" #fileUpload>
     <div class="file-upload">
       {{fileName || "Ei tiedostoa "}}
      <button mat-raised-button class="upload-btn" (click)="fileUpload.click()">Lisää kuva kysymykseen nro. {{selQuestion+1 }}</button>
     </div>
-  </div>
-  
+  </div>-->
+  <input type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)" #fileUpload>
+
 <p><mat-checkbox class="example-margin" [(ngModel)]="dataService.questionsData.public">Visa näkyy etusivulla luettelossa</mat-checkbox></p>
 
 

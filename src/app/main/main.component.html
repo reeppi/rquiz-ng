@@ -18,9 +18,16 @@
         Luettelo julkisista visoista
       </mat-panel-description>
     </mat-expansion-panel-header>
+
+    <div *ngIf="dataService.listQuestionsData != null">
+      <mat-chip-list aria-label="Fish selection">
+      <mat-chip *ngFor="let q of dataService.listQuestionsData" (click)="listQuizClick(q)">{{q?.name}}</mat-chip>
+      </mat-chip-list>
+    </div>
+    <!--
     <div *ngIf="dataService.listQuestionsData != null">
       <li *ngFor="let q of dataService.listQuestionsData"><a href="#" (click)="listQuizClick(q)">{{q?.name}}</a></li>
-    </div>
+    </div>-->
     <div *ngIf="dataService.listQuestionsData == null">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
@@ -36,7 +43,7 @@
    <button style="width:50%" mat-raised-button (click)="loginFacebook();"><img [src]="'assets/images/facebook_logo.png'"/> Kirjaudu FB:lla</button>
 </p>
  <!-- <p><button style="width:100%" mat-raised-button (click)="dataService.profileTest();">profileTest</button></p> -->
- <div *ngIf="!dataService.getLoggedIn()">Vain kirjautuneena voit luoda omia visoja ja lisätä nimesi visan pistetauluun.<br></div>
+ <div *ngIf="!dataService.getLoggedIn()">Kirjautuneena voit luoda omia visoja ja lisätä nimesi visan pistetauluun.<br></div>
 
  <strong>
   {{ errorText }}

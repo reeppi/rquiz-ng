@@ -27,6 +27,7 @@ import { deleteQuestionsComponent } from './edit/edit.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { imageComponent } from './question/question.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { imageComponent } from './question/question.component';
     MatCheckboxModule,
     MatDialogModule,
     MatProgressBarModule,
+    MatChipsModule,
     
     RouterModule.forRoot([
       { path: '', component: MainComponent },

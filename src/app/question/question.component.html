@@ -16,25 +16,20 @@
             </mat-radio-group>
         </div>
     
-    <div style="width:{{dataService.questionsData.questions[questionNumber-1].width/2}}px"  *ngIf="dataService.questionsData.questions[questionNumber-1].image != null && dataService.questionsData.questions[questionNumber-1].image!='' ">
+    <div style="width:{{dataService.questionsData.questions[questionNumber-1].width/2}}px"  *ngIf="dataService.questionsData.questions[questionNumber-1].image != null && dataService.questionsData.questions[questionNumber-1].image!='' " style="cursor: zoom-in;">
         <br>
             <a (click)="openImage(questionNumber)">
-            <img  src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{dataService.questionsData.questions[questionNumber-1].image}}" class="small">
+                <img class="small" src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{dataService.questionsData.questions[questionNumber-1].image}}">
             </a>
     </div>
-
-<!--    <div id="largeId" class="large">
-        <div class="large-content"><a href="#"><img  src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{dataService.questionsData.questions[questionNumber-1].image}}"></a></div>
-    </div>-->
-
     </div>
 
 
     <br>
 </div>
 
-<div  style="display: inline" *ngIf="questionNumber < dataService.questionsData.questions.length"><p> <button style="width:100%" mat-raised-button (click)="navClick(1);">Seuraava</button></p></div>
-<div  style="display: inline" *ngIf="questionNumber == dataService.questionsData.questions.length"><p><button style="width:100%" mat-raised-button (click)="navResults();">Siirry vastauksiin</button></p></div>
+<div  style="display: inline" *ngIf="questionNumber < dataService.questionsData.questions.length"><p> <button color="primary"  style="width:100%" mat-raised-button (click)="navClick(1);">Seuraava</button></p></div>
+<div style="display: inline" *ngIf="questionNumber == dataService.questionsData.questions.length"><p><button  color="primary"  style="width:100%" mat-raised-button (click)="navResults();">Siirry vastauksiin</button></p></div>
 <div style="display: inline" *ngIf="questionNumber > 1"><p><button style="width:100%" mat-raised-button (click)="navClick(-1);">Edellinen</button></p></div>
 
 </div>

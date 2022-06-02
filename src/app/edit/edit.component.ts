@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject } from '@angular/core';
 import { ActivatedRoute  } from '@angular/router';
 import { DataService } from '../data.service';
 import * as Models from "../data.models";
@@ -7,6 +7,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import {MatDialog,MatDialogConfig,MatDialogRef } from '@angular/material/dialog';
 import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit',
@@ -48,9 +49,12 @@ export class EditComponent implements OnInit {
   }
 
   removeImage(x: number) {
-    console.log("REMOVE IMAGE "+ x);
-    if ( this.dataService.questionsData)
-    this.dataService.questionsData.questions[x].image="";
+    const dialogRef = this.dialog.open(deleteQuestionsComponent,{  data: { question:"Haluatko varmasti poistaa kuvan?" }});
+    dialogRef.afterClosed().subscribe(result => { 
+      if ( this.dataService.questionsData != null )
+        if ( result )  
+          this.dataService.questionsData.questions[x].image="";
+    });
   }
 
   async onFileSelected(event: any) {
@@ -141,16 +145,17 @@ export class EditComponent implements OnInit {
 
   removeQuestion(index: number)
   {
-    if ( this.dataService.questionsData == null ) return;
-   this.dataService.questionsData?.questions.splice(index,1);
+    const dialogRef = this.dialog.open(deleteQuestionsComponent,{  data: { question:"Haluatko varmasti poistaa kysymyksen?" }});
+      dialogRef.afterClosed().subscribe(result => { 
+        if ( this.dataService.questionsData != null )
+          if ( result )  
+            this.dataService.questionsData.questions.splice(index,1);
+      });
   }
 
   deleteQuestions() {
-    const dialogRef = this.dialog.open(deleteQuestionsComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      if ( result ) 
-          this.dataService.deleteQuestions(this.quizName);
-      });
+    const dialogRef = this.dialog.open(deleteQuestionsComponent,{  data: { question:"Haluatko varmasti poistaa visan?" }});
+    dialogRef.afterClosed().subscribe(result => { if ( result ) this.dataService.deleteQuestions(this.quizName);});
   }
 
 }
@@ -160,7 +165,7 @@ export class EditComponent implements OnInit {
   templateUrl: './delete-dialog.html',
 })
 export class deleteQuestionsComponent {
-  constructor(public dialogRef: MatDialogRef<deleteQuestionsComponent>) {}
+  constructor(public dialogRef: MatDialogRef<deleteQuestionsComponent>, @Inject(MAT_DIALOG_DATA) public data: { question:string }) {}
   cancel() {
     this.dialogRef.close(false);
   }
