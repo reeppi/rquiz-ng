@@ -5,6 +5,14 @@
     align-items: flex-start;
   }
   
+  .small {
+    width:100%;
+    cursor: zoom-in;
+    border-radius: 3px;
+  }
+
+
+
   .example-radio-button {
     margin: 5px;
   }

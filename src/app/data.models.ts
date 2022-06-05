@@ -14,6 +14,7 @@ export type questionsType = {
 export type questionType = {   
     text: string;
     image: string;
+    audio: string;
     width: number;
     height: number;
     options: Array<string>

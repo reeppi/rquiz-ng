@@ -1,0 +1,10 @@
+
+<div [innerHTML]="data.text"></div>
+
+<div  style="display:flex; justify-content: center;">
+
+<mat-dialog-actions>
+    <button *ngIf="data.buttons.ok" class="mat-raised-button" (click)="ok()">{{data.buttons.ok}}</button>
+    <button *ngIf="data.buttons.cancel" class="mat-raised-button mat-primary" (click)="cancel()">{{data.buttons.cancel}}</button>
+</mat-dialog-actions>
+</div>

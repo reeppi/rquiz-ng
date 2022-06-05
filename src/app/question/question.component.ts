@@ -6,6 +6,7 @@ import { MatRadioButton } from '@angular/material/radio';
 import { Router } from '@angular/router';
 import {MatDialog,MatDialogConfig,MatDialogRef } from '@angular/material/dialog';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { imageDialogComponent } from '../dialog/image-dialog.component';
 
 
 @Component({
@@ -66,7 +67,7 @@ export class QuestionComponent implements OnInit {
         this.quizName=this.quizName.toLowerCase()
       if ( this.dataService.questionsData == null )
       {
-        this.dataService.fetchJsonData(this.quizName,false);
+        this.dataService.fetchJsonData(this.quizName,false,null);
       }
     }
   }
@@ -74,26 +75,10 @@ export class QuestionComponent implements OnInit {
   openImage(qNumber:number) {
     if ( this.dataService.questionsData == null ) return;
     var imageName: string=this.dataService.questionsData.questions[qNumber-1].image;
-    var image:string="https://tietovisa.s3.eu-north-1.amazonaws.com/"+this.quizName+"/"+imageName;
-    console.log("image "+image);
-    const dialogRef = this.dialog.open(imageComponent,{  data: { image }});
+    var image:string=this.dataService.imageUrl+"/"+this.quizName+"/"+imageName;
+    const dialogRef = this.dialog.open(imageDialogComponent,{  data: { image, edit:false}});
     dialogRef.afterClosed().subscribe(result => {});
   }
 
 }
 
-@Component({
-  selector: 'image-dialog',
-  templateUrl: './image-dialog.html',
-  styleUrls: ['./question.component.css']
-
-})
-export class imageComponent {
-  constructor(public dialogRef: MatDialogRef<imageComponent>, @Inject(MAT_DIALOG_DATA) public data: { image:string }) {
-
-  }
-  close() {
-    this.dialogRef.close(false);
-  }
-
-}

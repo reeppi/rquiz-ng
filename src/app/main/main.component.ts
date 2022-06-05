@@ -20,7 +20,7 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
 
     this.dataService.listQuizData = []; // omat visat
-    
+    this.dataService.errorMsg ="";   
     if ( this.dataService.questionsData != null )
       this.quizName = this.dataService.questionsData.name;
 

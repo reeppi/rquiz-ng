@@ -66,7 +66,7 @@ export class ResultsComponent implements OnInit {
     if ( this.quizName ) 
     {
       if ( this.dataService.questionsData == null )
-        this.dataService.fetchJsonData(this.quizName,false);
+        this.dataService.fetchJsonData(this.quizName,false,null);
       else
         this.calculateScores();
     }

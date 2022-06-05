@@ -37,13 +37,16 @@
   <div style="text-align: center;">
   <button style="width:70%" color="primary" mat-raised-button (click)="quizClick();">Avaa visa {{this.quizName}}</button> 
   <button style="width:30%" mat-raised-button (click)="scoreBoardClick();">Pistetaulu</button>
+
+  <div *ngIf="dataService.getLoggedIn()">
  <p><button style="width:100%" mat-raised-button (click)="editClick();">Luo/Muokkaa visaa {{this.quizName}}</button> </p>
+  </div>
  <p>
    <button style="width:50%" mat-raised-button (click)="loginGoogle();"><img [src]="'assets/images/google_logo.png'"/> Kirjaudu Googlella</button>
    <button style="width:50%" mat-raised-button (click)="loginFacebook();"><img [src]="'assets/images/facebook_logo.png'"/> Kirjaudu FB:lla</button>
 </p>
  <!-- <p><button style="width:100%" mat-raised-button (click)="dataService.profileTest();">profileTest</button></p> -->
- <div *ngIf="!dataService.getLoggedIn()">Kirjautuneena voit luoda omia visoja ja lisätä nimesi visan pistetauluun.<br></div>
+ <div *ngIf="!dataService.getLoggedIn()">Kirjautuneena voit tehdä omia visoja ja käyttää pistetaulua.<br></div>
 
  <strong>
   {{ errorText }}

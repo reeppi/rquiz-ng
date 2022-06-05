@@ -20,6 +20,7 @@ export class DataService {
   public title = "TIETOVISA";
   public ssl : boolean = true;
   public token : string="";
+  public imageUrl : string="https://tietovisa.s3.eu-north-1.amazonaws.com";
 
   constructor( private cookieService: CookieService ){
       console.log (" :: "+window.location.hostname);
@@ -145,8 +146,9 @@ export class DataService {
     }
   }
 
+  public newQuiz: Boolean=false;
 
-  async fetchJsonData(quizName: string, edit: boolean) 
+  async fetchJsonData(quizName: string, edit: boolean, callback:any) 
   {  
     console.log("Data fetching "+quizName)    
     //this.questionsData = JSON.parse(JSON.stringify(localQuiz));
@@ -162,7 +164,11 @@ export class DataService {
           this.questionsData = null;
           this.errorMsg = data.error;
           if ( edit ) 
+          {
             this.createNewQuiz();
+            if ( data.dialog )
+              this.newQuiz=true;
+          }
        }
        else 
        {

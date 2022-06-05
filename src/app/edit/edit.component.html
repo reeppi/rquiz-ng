@@ -33,7 +33,7 @@
 
     <div style="display:flex; justify-content: center;">
     <div *ngIf="question.image!= null && question.image!='' " style="width:{{question.width/2}}px">
-      <img style="width:100%" (click)="removeImage(x)" src="https://tietovisa.s3.eu-north-1.amazonaws.com/{{this.quizName}}/{{question.image}}">
+      <img  class="small" (click)="removeImage(x)" src="{{this.dataService.imageUrl}}/{{this.quizName}}/{{question.image}}">
     </div>
   </div>
     <!--Kuva: {{ question.image }}<br>-->
@@ -55,25 +55,27 @@
   <div *ngIf="!uploadingImage">
     <div class="file-upload"><button mat-raised-button  color="primary"  class="upload-btn" (click)="fileUpload.click()">Lisää kuva kysymykseen</button></div>
   </div>
+  <div *ngIf="!uploadingImage">
+    <button mat-raised-button (click)="initiateRecording()"  *ngIf="!recording"> Nauhoita äänite </button>
+    <button mat-raised-button (click)="stopRecording()"  *ngIf="recording"> Pysäytä nauhoitus {{ seconds }}/60s</button>
+    <div class="clearfix"></div>
+    <div *ngIf="url">
+    <audio controls="" style="width: 300px;">
+      <source [src]="sanitize(url)">
+    </audio>
+    </div>
+    <div *ngIf="url"><button  color="primary"  mat-raised-button (click)="saveAudio()">Lisää äänite kysymykseen</button></div>
+  </div>
+
 
   </mat-expansion-panel>
 </mat-accordion>
+
 <p>
     <button style="width:70%"  color="primary"  mat-raised-button (click)="addQuestion()">Lisää kysymys</button>
     <button style="width:30%" mat-raised-button (click)="openQuiz()"> Avaa visa </button>
   </p>
 
-  <!--
-  <div *ngIf="uploadingImage">
-    <mat-progress-bar mode="determinate" [value]="uploadingProgress"></mat-progress-bar>
-  </div>
-  <div *ngIf="!uploadingImage">
-    <input type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)" #fileUpload>
-    <div class="file-upload">
-      {{fileName || "Ei tiedostoa "}}
-     <button mat-raised-button class="upload-btn" (click)="fileUpload.click()">Lisää kuva kysymykseen nro. {{selQuestion+1 }}</button>
-    </div>
-  </div>-->
   <input type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)" #fileUpload>
 
 <p><mat-checkbox class="example-margin" [(ngModel)]="dataService.questionsData.public">Visa näkyy etusivulla luettelossa</mat-checkbox></p>

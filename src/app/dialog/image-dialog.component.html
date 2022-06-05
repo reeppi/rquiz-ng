@@ -1,0 +1,9 @@
+<div mat-dialog-content class="mat-dialog-content">
+    <img (click)="cancel()" style="width: 100%; cursor: zoom-out;" src="{{data.image}}">
+</div>
+<div *ngIf="data.edit" style="justify-content:center; display:flex;">
+    <mat-dialog-actions>
+        <button class="mat-raised-button" (click)="ok()">Poista</button>
+        <button class="mat-raised-button mat-primary" (click)="cancel()">Sulje</button>
+    </mat-dialog-actions>
+    </div>

@@ -8,6 +8,13 @@ import {MatDialog,MatDialogConfig,MatDialogRef } from '@angular/material/dialog'
 import { HttpClient, HttpHeaders, HttpEventType } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { dialogComponent } from '../dialog/dialog.component';
+import { imageDialogComponent } from '../dialog/image-dialog.component';
+import  * as RecordRTC   from 'recordrtc';
+import { DomSanitizer } from '@angular/platform-browser';
+import {ChangeDetectorRef} from '@angular/core';
+import { NgStyle } from '@angular/common';
+
 
 @Component({
   selector: 'app-edit',
@@ -22,7 +29,11 @@ export class EditComponent implements OnInit {
     public dataService : DataService,
      public router: Router,
      private title:Title,
-     public dialog: MatDialog) { }
+     public dialog: MatDialog,
+     private domSanitizer: DomSanitizer,
+     private cd : ChangeDetectorRef
+
+     ) { }
 
   public quizName :string | null = "";
   panelOpenState = false;
@@ -30,6 +41,15 @@ export class EditComponent implements OnInit {
   selQuestion : number=0;
   uploadingImage : Boolean = false;
   uploadingProgress : number=0;
+
+
+  public recording = false;
+  public url : any;
+  public error : string ="";
+  public recorder:any;
+  public audioBlob: any;
+  public seconds: number=0;
+  public timerId: any;
 
   ngOnInit(): void {
     this.dataService.editErrorMsg = "";
@@ -39,17 +59,124 @@ export class EditComponent implements OnInit {
     {
       if ( this.dataService.questionsData == null )
       {
-        this.dataService.fetchJsonData(this.quizName,true);
+        this.fetchQuiz();
       }
     }
   }
+  sanitize(url:string){
+    return this.domSanitizer.bypassSecurityTrustUrl(url);
+}
+
+  initiateRecording() {
+    let mediaConstraints = { video: false, audio: true};
+    navigator.mediaDevices
+        .getUserMedia(mediaConstraints)
+        .then(this.successCallback.bind(this), this.errorCallback.bind(this));
+}
+
+successCallback(stream:any) {
+    this.seconds=0;
+    this.timerId=setInterval(()=>{ this.seconds++; if ( this.seconds >= 60 ) this.stopRecording(); },1000); 
+    this.url="";
+    this.recording = true;
+     this.recorder = new RecordRTC.default(stream,{mimeType:"audio/webm",bitrate:64000});
+     this.recorder.startRecording();
+}
+
+stopRecording() {
+  clearInterval(this.timerId);
+  this.recording = false;
+  this.recorder.stopRecording(this.audioReady.bind(this));
+}
+
+audioReady(blobUrl:any){
+  this.url=blobUrl;
+  this.audioBlob = this.recorder.getBlob();
+  this.cd.detectChanges();
+}
+
+errorCallback(error:any) {
+  this.dataService.editErrorMsg = 'Mikrofonia ei pääse käyttämään!';
+}
+
+saveAudio() {
+  var tokeni : string|null = window.sessionStorage.getItem("JWT");
+  if ( tokeni == null ) { this.dataService.editErrorMsg = "Kirjaudu ensiksi sisään"; return; }
+
+  this.uploadingImage = true;
+  this.uploadingProgress = 0;
+  this.cd.detectChanges();
+
+  const formData = new FormData();
+  formData.append("audio", this.audioBlob);
+  const upload$ = this.http.post<any>(this.dataService.APIURL+"/uploadaudio?name="+this.quizName+"&question="+this.selQuestion, formData,
+  {
+      reportProgress: true,
+      observe: 'events',
+      headers: new HttpHeaders({ 'Authorization': tokeni })
+    }
+  );
+  upload$.subscribe(event => {
+    if (event.type == HttpEventType.UploadProgress) {
+        if ( event.total )
+        {
+          this.uploadingProgress = event.loaded/event.total*100;
+          this.cd.detectChanges();
+        }
+    }
+    if ( event.type == HttpEventType.Response) {
+      if ( event.body )
+      {
+        this.uploadingImage = false;
+        this.cd.detectChanges();
+
+        if ( event.body.hasOwnProperty('error'))
+        {
+          this.dataService.editErrorMsg = event.body.error;
+        }
+        if ( event.body.hasOwnProperty('done'))
+        {
+          if ( this.dataService.questionsData != null ) 
+          {
+            console.log("event.body.done "+event.body.done);
+             this.dataService.questionsData.questions[this.selQuestion].audio=event.body.done;
+          }
+        }
+      }
+    }
+  }) 
+
+}
+
+
+
+  async fetchQuiz()
+  {
+    if ( this.quizName == null)  return;
+    await this.dataService.fetchJsonData(this.quizName,true,null);
+    if ( this.dataService.newQuiz ) {
+      const dialogRef = this.dialog.open(dialogComponent,
+        {  data: { text:"Tallennetaanko uusi visa "+this.quizName, 
+                    buttons: {ok:"Tallenna",cancel:"Keskeytä"}}});
+          dialogRef.afterClosed().subscribe(result => 
+        { 
+          this.dataService.newQuiz= false;
+            if ( result ) { this.dataService.updateQuestions(this.quizName); }
+        });
+    }
+  }
+
+
 
   test(x: number){
     console.log(x);
   }
 
   removeImage(x: number) {
-    const dialogRef = this.dialog.open(deleteQuestionsComponent,{  data: { question:"Haluatko varmasti poistaa kuvan?" }});
+    if ( this.dataService.questionsData == null ) return;
+    var imageName: string=this.dataService.questionsData.questions[x].image;
+    var image:string=this.dataService.imageUrl+"/"+this.quizName+"/"+imageName;
+    const dialogRef = this.dialog.open(imageDialogComponent,{  data: { image:image, question:"Haluatko varmasti poistaa kuvan?", edit:true }});
     dialogRef.afterClosed().subscribe(result => { 
       if ( this.dataService.questionsData != null )
         if ( result )  
@@ -58,18 +185,22 @@ export class EditComponent implements OnInit {
   }
 
   async onFileSelected(event: any) {
+    var tokeni : string|null = window.sessionStorage.getItem("JWT");
+    if ( tokeni == null ) { this.dataService.editErrorMsg = "Kirjaudu ensiksi sisään"; return; }
 
+    
     await this.dataService.updateQuestions(this.quizName);
     this.uploadingImage = true;
     this.uploadingProgress = 0;
-    var tokeni : string|null = window.sessionStorage.getItem("JWT");
-    if ( tokeni == null ) { this.dataService.editErrorMsg = "Kirjaudu ensiksi sisään"; return; }
+
     var uploadSub: Subscription;    
     const file:File = event.target.files[0];
     if (file) {
         this.fileName = file.name;
         const formData = new FormData();
         formData.append("image", file);
+
+    
         const upload$ = this.http.post<any>(this.dataService.APIURL+"/upload?name="+this.quizName+"&question="+this.selQuestion, formData,
         {
             reportProgress: true,
@@ -126,7 +257,7 @@ export class EditComponent implements OnInit {
   {
     if ( this.dataService.questionsData == null ) return;
     let question : Models.questionType;
-    question = { text: "", options:[], true:0, image:"", width:0, height:0, answer:null };
+    question = { text: "", options:[], true:0, image:"", audio:"", width:0, height:0, answer:null };
     this.dataService.questionsData.questions.push(question);
     this.selQuestion=this.dataService.questionsData.questions.length-1;
   }
@@ -145,7 +276,7 @@ export class EditComponent implements OnInit {
 
   removeQuestion(index: number)
   {
-    const dialogRef = this.dialog.open(deleteQuestionsComponent,{  data: { question:"Haluatko varmasti poistaa kysymyksen?" }});
+    const dialogRef = this.dialog.open(dialogComponent,{  data: { text:"Haluatko varmasti poistaa kysymyksen?", buttons :{ok:"Poista", cancel:"Keskeytä"} }});
       dialogRef.afterClosed().subscribe(result => { 
         if ( this.dataService.questionsData != null )
           if ( result )  
@@ -154,12 +285,13 @@ export class EditComponent implements OnInit {
   }
 
   deleteQuestions() {
-    const dialogRef = this.dialog.open(deleteQuestionsComponent,{  data: { question:"Haluatko varmasti poistaa visan?" }});
-    dialogRef.afterClosed().subscribe(result => { if ( result ) this.dataService.deleteQuestions(this.quizName);});
+      const dialogRef = this.dialog.open(dialogComponent,{  data: { text:"Haluatko varmasti poistaa visan?", buttons :{ok:"Poista",cancel:"Keskeytä"} }});
+      dialogRef.afterClosed().subscribe(result => { if ( result ) this.dataService.deleteQuestions(this.quizName);});
   }
 
 }
 
+/*
 @Component({
   selector: 'delete-dialog',
   templateUrl: './delete-dialog.html',
@@ -172,4 +304,4 @@ export class deleteQuestionsComponent {
   delete() {
     this.dialogRef.close(true);
   }
-}
+}*/

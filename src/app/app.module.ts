@@ -14,20 +14,20 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatIconModule} from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MainComponent } from './main/main.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule} from '@angular/material/table';
 import { Title } from '@angular/platform-browser';
 import { CookieService } from 'ngx-cookie-service';
 import { MatSelectModule } from '@angular/material/select';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatDialogModule} from '@angular/material/dialog'; 
-import { deleteQuestionsComponent } from './edit/edit.component';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatCheckboxModule} from '@angular/material/checkbox';
+import { MatDialogModule} from '@angular/material/dialog'; 
+import { MatProgressBarModule} from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
-import { imageComponent } from './question/question.component';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatChipsModule} from '@angular/material/chips';
+import { dialogComponent } from './dialog/dialog.component';
+import { imageDialogComponent } from './dialog/image-dialog.component';
 
 @NgModule({
   declarations: [
@@ -37,8 +37,8 @@ import {MatChipsModule} from '@angular/material/chips';
     EditComponent,
     MainComponent,
     ScoreboardComponent,
-    deleteQuestionsComponent,
-    imageComponent
+    dialogComponent,
+    imageDialogComponent,
     
   ],
   imports: [
