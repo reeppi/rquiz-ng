@@ -1,4 +1,4 @@
-import { Component, OnInit,Inject } from '@angular/core';
+import { Component, OnInit,Inject ,ElementRef,ViewChild} from '@angular/core';
 import { ActivatedRoute  } from '@angular/router';
 import { DataService } from '../data.service';
 import * as Models from "../data.models";
@@ -13,8 +13,6 @@ import { imageDialogComponent } from '../dialog/image-dialog.component';
 import  * as RecordRTC   from 'recordrtc';
 import { DomSanitizer } from '@angular/platform-browser';
 import {ChangeDetectorRef} from '@angular/core';
-import { NgStyle } from '@angular/common';
-
 
 @Component({
   selector: 'app-edit',
@@ -22,6 +20,8 @@ import { NgStyle } from '@angular/common';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
+
+  @ViewChild('audioCtrl') audioCtrl: any;
 
   constructor(
     private http: HttpClient,
@@ -42,6 +42,7 @@ export class EditComponent implements OnInit {
   uploadingImage : Boolean = false;
   uploadingProgress : number=0;
 
+  audioMap = new Map<number,{url:string,blob:any}>();
 
   public recording = false;
   public url : any;
@@ -63,8 +64,11 @@ export class EditComponent implements OnInit {
       }
     }
   }
-  sanitize(url:string){
-    return this.domSanitizer.bypassSecurityTrustUrl(url);
+  sanitize(url1:string | undefined){
+    if ( url1 )
+      return this.domSanitizer.bypassSecurityTrustUrl(url1);
+    else 
+      return this.domSanitizer.bypassSecurityTrustUrl("");
 }
 
   initiateRecording() {
@@ -75,40 +79,56 @@ export class EditComponent implements OnInit {
 }
 
 successCallback(stream:any) {
+
+    this.recording=true;
+    this.audioMap.delete(this.selQuestion);
     this.seconds=0;
-    this.timerId=setInterval(()=>{ this.seconds++; if ( this.seconds >= 60 ) this.stopRecording(); },1000); 
-    this.url="";
-    this.recording = true;
+    this.cd.detectChanges();
+
+    this.timerId=setInterval(()=>{ 
+      this.seconds++; 
+      this.cd.detectChanges(); 
+      if ( this.seconds >= 60 ) this.stopRecording(); },1000); 
+  
+     this.url="";
+     this.recording = true;
      this.recorder = new RecordRTC.default(stream,{mimeType:"audio/webm",bitrate:64000});
      this.recorder.startRecording();
 }
 
 stopRecording() {
+  this.recording=false;
   clearInterval(this.timerId);
   this.recording = false;
   this.recorder.stopRecording(this.audioReady.bind(this));
 }
 
 audioReady(blobUrl:any){
+  console.log(this.selQuestion+":"+blobUrl);
+  this.audioMap.set(this.selQuestion,{url:blobUrl,blob:this.recorder.getBlob()});
   this.url=blobUrl;
   this.audioBlob = this.recorder.getBlob();
   this.cd.detectChanges();
 }
 
+
+
 errorCallback(error:any) {
   this.dataService.editErrorMsg = 'Mikrofonia ei pääse käyttämään!';
 }
 
-saveAudio() {
+async saveAudio() {
   var tokeni : string|null = window.sessionStorage.getItem("JWT");
   if ( tokeni == null ) { this.dataService.editErrorMsg = "Kirjaudu ensiksi sisään"; return; }
 
+  await this.dataService.updateQuestions(this.quizName);
+
+  const formData = new FormData();
+  formData.append("audio", this.audioMap.get(this.selQuestion)?.blob);
+  //formData.append("audio", this.audioBlob);
   this.uploadingImage = true;
   this.uploadingProgress = 0;
   this.cd.detectChanges();
-
-  const formData = new FormData();
-  formData.append("audio", this.audioBlob);
   const upload$ = this.http.post<any>(this.dataService.APIURL+"/uploadaudio?name="+this.quizName+"&question="+this.selQuestion, formData,
   {
       reportProgress: true,
@@ -129,7 +149,7 @@ saveAudio() {
       {
         this.uploadingImage = false;
         this.cd.detectChanges();
-
+      
         if ( event.body.hasOwnProperty('error'))
         {
           this.dataService.editErrorMsg = event.body.error;
@@ -140,6 +160,10 @@ saveAudio() {
           {
             console.log("event.body.done "+event.body.done);
              this.dataService.questionsData.questions[this.selQuestion].audio=event.body.done;
+             var pp = document.getElementById("player"+this.selQuestion) as any;
+             if ( pp != null)  pp.load();
+             this.audioMap.delete(this.selQuestion);
+             this.cd.detectChanges();
           }
         }
       }
@@ -170,12 +194,15 @@ saveAudio() {
 
   test(x: number){
     console.log(x);
+    var pp = document.getElementById("eplayer"+this.selQuestion) as any;
+    if ( pp != null)  pp.load();
+    this.cd.detectChanges();
   }
 
   removeImage(x: number) {
     if ( this.dataService.questionsData == null ) return;
     var imageName: string=this.dataService.questionsData.questions[x].image;
-    var image:string=this.dataService.imageUrl+"/"+this.quizName+"/"+imageName;
+    var image:string=this.dataService.imageUrl+"/"+this.quizName+"/images/"+imageName;
     const dialogRef = this.dialog.open(imageDialogComponent,{  data: { image:image, question:"Haluatko varmasti poistaa kuvan?", edit:true }});
     dialogRef.afterClosed().subscribe(result => { 
       if ( this.dataService.questionsData != null )
@@ -248,6 +275,20 @@ saveAudio() {
    if ( this.dataService.questionsData == null ) return;
   }
 
+  removeAudio()
+  {
+    if ( this.dataService.questionsData == null ) return;
+    const dialogRef = this.dialog.open(dialogComponent,{  data: { text:"Haluatko varmasti poistaa äänitteen?", buttons :{ok:"Poista", cancel:"Keskeytä"} }});
+    dialogRef.afterClosed().subscribe(result => { 
+      if ( this.dataService.questionsData != null )
+        if ( result )  
+        {
+        this.dataService.questionsData.questions[this.selQuestion].audio="";
+        this.cd.detectChanges();
+        }
+    });
+
+  }
   openQuiz()
   {
     this.router.navigateByUrl('/'+this.quizName);

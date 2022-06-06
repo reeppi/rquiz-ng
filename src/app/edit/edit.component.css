@@ -3,6 +3,7 @@
     flex-direction: column;
     margin: 15px 0;
     align-items: flex-start;
+    width:100%;
   }
   
   .small {
@@ -11,15 +12,13 @@
     border-radius: 3px;
   }
 
-
-
   .example-radio-button {
     margin: 5px;
+    width:100%; 
   }
 
   .example-form {
     min-width: 150px;
-  
     width: 100%;
   }
   

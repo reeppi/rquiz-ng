@@ -31,9 +31,11 @@ export class QuestionComponent implements OnInit {
   updateQuestion(index: string ){ 
     this.questionNumber = Number(index);
     if ( this.questionNumber <=0 ) this.questionNumber=1;
-    console.log("--->"+ this.questionNumber);
     if ( this.dataService.questionsData != null ) 
      this.radioIndex = this.dataService.questionsData.questions[this.questionNumber-1].answer;
+
+     var pp = document.getElementById("player") as any;
+     if ( pp != null)  pp.load();
      
   }
 
@@ -42,6 +44,10 @@ export class QuestionComponent implements OnInit {
   }
   newQuizClick() {
     this.router.navigateByUrl('/'+this.quizName+'/edit');
+  }
+
+  navMain() {
+    this.router.navigateByUrl('/');
   }
 
   navResults() {
@@ -75,7 +81,7 @@ export class QuestionComponent implements OnInit {
   openImage(qNumber:number) {
     if ( this.dataService.questionsData == null ) return;
     var imageName: string=this.dataService.questionsData.questions[qNumber-1].image;
-    var image:string=this.dataService.imageUrl+"/"+this.quizName+"/"+imageName;
+    var image:string=this.dataService.imageUrl+"/"+this.quizName+"/images/"+imageName;
     const dialogRef = this.dialog.open(imageDialogComponent,{  data: { image, edit:false}});
     dialogRef.afterClosed().subscribe(result => {});
   }
