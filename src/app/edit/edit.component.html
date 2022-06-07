@@ -31,22 +31,24 @@
     </mat-expansion-panel-header>
     <textarea style="width:100%" [(ngModel)]="question.text" placeholder="Kirjoita kysymys">fff</textarea>
 
+    <div *ngIf="question.audio">
+      <audio  controls="" id="player{{x}}" style="width: 100%;" #audioCtrl>
+        <source src="{{this.dataService.imageUrl}}/{{this.quizName}}/audio/{{question.audio}}">
+      </audio>
+    </div>
+
     <div style="display:flex; justify-content: center;">
     <div *ngIf="question.image!= null && question.image!='' " style="width:{{question.width/2}}px">
       <img  class="small" (click)="removeImage(x)" src="{{this.dataService.imageUrl}}/{{this.quizName}}/images/{{question.image}}">
     </div>
   </div>
-  <div *ngIf="question.audio">
-    <audio  controls="" id="player{{x}}" style="width: 100%;" #audioCtrl>
-      <source src="{{this.dataService.imageUrl}}/{{this.quizName}}/audio/{{question.audio}}">
-    </audio>
-  </div>
+
 
     <!--Kuva: {{ question.image }}<br>-->
     <mat-radio-group [(ngModel)]="question.true" aria-labelledby="example-radio-group-label" class="example-radio-group">
       <mat-radio-button class="example-radio-button" *ngFor="let option of question.options; index as i" [value]="i">
 
-           <input [style.width.%]="100" [value]="question.options[i]" (change)="optionChanged($event,i,x)">
+           <input size="20" [value]="question.options[i]" (change)="optionChanged($event,i,x)">
            <a (click)="removeOption(i,x)">[Poista]</a>
         
 
@@ -72,14 +74,15 @@
   <br>
 
   <div *ngIf="!question.audio">
-  <button mat-raised-button style="width:100%" (click)="initiateRecording()"  *ngIf="!recording"> Nauhoita äänite </button>
-  <button mat-raised-button style="width:100%" (click)="stopRecording()"  *ngIf="recording"> Pysäytä nauhoitus {{ seconds }}/60s</button>
+  <button mat-raised-button style="width:100%"  (click)="initiateRecording()"  *ngIf="!recording"> Nauhoita äänite </button>
+  <button mat-raised-button style="width:100%" (click)="stopRecording()"  *ngIf="recording"> Pysäytä nauhoitus {{ seconds }}/60s</button>    
   </div>
   <div *ngIf="question.audio">
     <button mat-raised-button style="width:55%" (click)="initiateRecording()"  *ngIf="!recording"> Nauhoita äänite </button>
     <button mat-raised-button style="width:55%" (click)="stopRecording()"  *ngIf="recording"> Pysäytä nauhoitus {{ seconds }}/60s</button>
     <button mat-raised-button style="width:45%" (click)="removeAudio()">Poista äänite</button>
   </div>
+  <br>
 
   <div class="clearfix"></div>
   <div *ngIf="audioMap.has(selQuestion)">
@@ -87,8 +90,10 @@
       <source [src]="sanitize(audioMap.get(selQuestion)?.url)">
     </audio>
   </div>
-  <div *ngIf="audioMap.has(selQuestion)"><button style="width:100%" color="primary"  mat-raised-button (click)="saveAudio();">Lisää äänite kysymykseen</button></div>
-  </div>
+  
+  <div *ngIf="audioMap.has(selQuestion)"><p><button style="width:100%" color="primary"  mat-raised-button (click)="saveAudio();">Lisää äänite kysymykseen</button></div>
+  
+</div>
 
   </mat-expansion-panel>
 </mat-accordion>

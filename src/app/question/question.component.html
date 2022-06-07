@@ -8,7 +8,7 @@
 
     <div style="display:flex; border:1px; justify-content:space-between;">
 
-        <div style="width:max-content" >
+        <div style="width:100%" >
             <div *ngIf="dataService.questionsData.questions[questionNumber-1].audio">
                 <audio  controls="" id="player"  style="width: 100%;">
                   <source src="{{this.dataService.imageUrl}}/{{this.quizName}}/audio/{{dataService.questionsData.questions[questionNumber-1].audio}}">
@@ -21,7 +21,7 @@
             </mat-radio-group>
         </div>
     
-    <div style="width:{{dataService.questionsData.questions[questionNumber-1].width/2}}px"  *ngIf="dataService.questionsData.questions[questionNumber-1].image != null && dataService.questionsData.questions[questionNumber-1].image!='' " style="cursor: zoom-in;">
+    <div style="max-width:{{dataService.questionsData.questions[questionNumber-1].width/2}}px"  *ngIf="dataService.questionsData.questions[questionNumber-1].image != null && dataService.questionsData.questions[questionNumber-1].image!='' " style="cursor: zoom-in;">
             <a (click)="openImage(questionNumber)">
                 <img class="small" src="{{this.dataService.imageUrl}}/{{this.quizName}}/images/{{dataService.questionsData.questions[questionNumber-1].image}}">
             </a>
@@ -35,7 +35,7 @@
 <div  style="display: inline" *ngIf="questionNumber < dataService.questionsData.questions.length"><p> <button color="primary"  style="width:100%" mat-raised-button (click)="navClick(1);">Seuraava</button></p></div>
 <div style="display: inline" *ngIf="questionNumber == dataService.questionsData.questions.length"><p><button  color="primary"  style="width:100%" mat-raised-button (click)="navResults();">Siirry vastauksiin</button></p></div>
 <div style="display: inline" *ngIf="questionNumber > 1"><p><button style="width:100%" mat-raised-button (click)="navClick(-1);">Edellinen</button></p></div>
-<div style="display: inline" *ngIf="questionNumber == 1"><p><button style="width:100%" mat-raised-button (click)="navMain();">Paluu alkuun</button></p></div>
+<div style="display: inline" *ngIf="questionNumber == 1"><p><button style="width:100%" mat-raised-button (click)="navMain();">Palaa etusivulle</button></p></div>
 
 </div>
 
