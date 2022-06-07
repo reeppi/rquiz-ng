@@ -28,6 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatChipsModule} from '@angular/material/chips';
 import { dialogComponent } from './dialog/dialog.component';
 import { imageDialogComponent } from './dialog/image-dialog.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { imageDialogComponent } from './dialog/image-dialog.component';
     MatDialogModule,
     MatProgressBarModule,
     MatChipsModule,
+    DragDropModule,
     
     RouterModule.forRoot([
       { path: '', component: MainComponent },

@@ -81,6 +81,15 @@ export class DataService {
     
   }
 
+  replacer(name:any, val:any) 
+  {
+    if ( name === 'audioEdit' ) { 
+        return undefined; 
+    } else {
+        return val; 
+    }
+};
+
   async updateQuestions(quizName: string | null)
   { 
     this.errorMsg ="";
@@ -93,6 +102,9 @@ export class DataService {
     if ( this.questionsData == null ) return;
     this.questionsData.name=quizName;
     console.log("update questions");
+    var jsonStr = JSON.stringify(this.questionsData,this.replacer);
+    console.log(jsonStr);
+    
     const response = await window.fetch(this.APIURL+"/edit?name="+quizName,
     { 
     method: 'post', 
@@ -101,8 +113,9 @@ export class DataService {
       'Authorization': tokeni,
       'Content-Type': 'application/json'
       }),
-    body : JSON.stringify(this.questionsData)
+    body :jsonStr
     });
+    
     if (response.ok) {
       const data  = await response.json();
       if ( data.hasOwnProperty('error') ) 

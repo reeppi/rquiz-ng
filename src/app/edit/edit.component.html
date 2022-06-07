@@ -77,22 +77,29 @@
   <button mat-raised-button style="width:100%"  (click)="initiateRecording()"  *ngIf="!recording"> Nauhoita äänite </button>
   <button mat-raised-button style="width:100%" (click)="stopRecording()"  *ngIf="recording"> Pysäytä nauhoitus {{ seconds }}/60s</button>    
   </div>
-  <div *ngIf="question.audio">
+  <div *ngIf="question.audio && !recording">
     <button mat-raised-button style="width:55%" (click)="initiateRecording()"  *ngIf="!recording"> Nauhoita äänite </button>
-    <button mat-raised-button style="width:55%" (click)="stopRecording()"  *ngIf="recording"> Pysäytä nauhoitus {{ seconds }}/60s</button>
     <button mat-raised-button style="width:45%" (click)="removeAudio()">Poista äänite</button>
   </div>
-  <br>
+
+  <div *ngIf="question.audio && recording">
+    <button mat-raised-button style="width:100%" (click)="stopRecording()"> Pysäytä nauhoitus {{ seconds }}/60s</button>
+  </div>
+
+  <div *ngIf="dataService.questionsData.questions[selQuestion]?.audioEdit">
+    <p><button style="width:100%" color="primary"  mat-raised-button (click)="saveAudio();">Lisää äänite kysymykseen</button>
+  </div>
 
   <div class="clearfix"></div>
-  <div *ngIf="audioMap.has(selQuestion)">
+  <div *ngIf="dataService.questionsData.questions[selQuestion]?.audioEdit">
     <audio controls="" style="width: 100%;" id="eplayer{{x}}" >
-      <source [src]="sanitize(audioMap.get(selQuestion)?.url)">
+      <source [src]="sanitize(dataService.questionsData.questions[selQuestion].audioEdit?.url)">
     </audio>
   </div>
-  
-  <div *ngIf="audioMap.has(selQuestion)"><p><button style="width:100%" color="primary"  mat-raised-button (click)="saveAudio();">Lisää äänite kysymykseen</button></div>
-  
+
+
+
+
 </div>
 
   </mat-expansion-panel>
@@ -105,8 +112,24 @@
 
   <input type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)" #fileUpload>
 
-<p><mat-checkbox class="example-margin" [(ngModel)]="dataService.questionsData.public">Visa näkyy etusivulla luettelossa</mat-checkbox></p>
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Muuta kysymysten järjestystä
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div cdkDropListGroup>
+      <div class="example-container">
+        <div cdkDropList [cdkDropListData]="dataService.questionsData.questions" class="example-list" (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of dataService.questionsData.questions; index as i" cdkDrag>{{i+1}}. {{item.text}}</div>
+        </div>
+      </div>
+    </div>    
+  </mat-expansion-panel>
+</mat-accordion>
 
+<p><mat-checkbox class="example-margin" [(ngModel)]="dataService.questionsData.public">Visa näkyy etusivulla luettelossa</mat-checkbox></p>
 
 <div *ngIf="!dataService.loadingQuiz">
   <hr style="color:silver;border-top: 1px" width="100%">

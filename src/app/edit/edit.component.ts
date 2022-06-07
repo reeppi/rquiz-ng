@@ -13,6 +13,8 @@ import { imageDialogComponent } from '../dialog/image-dialog.component';
 import  * as RecordRTC   from 'recordrtc';
 import { DomSanitizer } from '@angular/platform-browser';
 import {ChangeDetectorRef} from '@angular/core';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'app-edit',
@@ -81,6 +83,7 @@ export class EditComponent implements OnInit {
 successCallback(stream:any) {
 
     this.recording=true;
+    delete this.dataService.questionsData?.questions[this.selQuestion].audioEdit
     this.audioMap.delete(this.selQuestion);
     this.seconds=0;
     this.cd.detectChanges();
@@ -105,9 +108,16 @@ stopRecording() {
 
 audioReady(blobUrl:any){
   console.log(this.selQuestion+":"+blobUrl);
+
+  if ( this.dataService.questionsData) 
+  {
+    this.dataService.questionsData.questions[this.selQuestion].audioEdit={ url:blobUrl, blob:this.recorder.getBlob() }
+  }
+    /*  
+
   this.audioMap.set(this.selQuestion,{url:blobUrl,blob:this.recorder.getBlob()});
   this.url=blobUrl;
-  this.audioBlob = this.recorder.getBlob();
+  this.audioBlob = this.recorder.getBlob();*/
   this.cd.detectChanges();
 }
 
@@ -120,11 +130,16 @@ errorCallback(error:any) {
 async saveAudio() {
   var tokeni : string|null = window.sessionStorage.getItem("JWT");
   if ( tokeni == null ) { this.dataService.editErrorMsg = "Kirjaudu ensiksi sisään"; return; }
+  console.log("Save BLOB URL : "+this.dataService.questionsData?.questions[this.selQuestion].audioEdit?.url);
+
+  console.log( this.dataService.questionsData?.questions[this.selQuestion].audioEdit?.blob);
+  const formData = new FormData();
+  formData.append("audio", this.dataService.questionsData?.questions[this.selQuestion].audioEdit?.blob);
 
   await this.dataService.updateQuestions(this.quizName);
 
-  const formData = new FormData();
-  formData.append("audio", this.audioMap.get(this.selQuestion)?.blob);
+
+  //formData.append("audio", this.audioMap.get(this.selQuestion)?.blob);
   //formData.append("audio", this.audioBlob);
   this.uploadingImage = true;
   this.uploadingProgress = 0;
@@ -330,19 +345,19 @@ async saveAudio() {
       dialogRef.afterClosed().subscribe(result => { if ( result ) this.dataService.deleteQuestions(this.quizName);});
   }
 
+
+  drop(event: CdkDragDrop<Models.questionType[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+  }
+
 }
 
-/*
-@Component({
-  selector: 'delete-dialog',
-  templateUrl: './delete-dialog.html',
-})
-export class deleteQuestionsComponent {
-  constructor(public dialogRef: MatDialogRef<deleteQuestionsComponent>, @Inject(MAT_DIALOG_DATA) public data: { question:string }) {}
-  cancel() {
-    this.dialogRef.close(false);
-  }
-  delete() {
-    this.dialogRef.close(true);
-  }
-}*/

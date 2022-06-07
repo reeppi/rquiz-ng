@@ -17,6 +17,7 @@ export type questionType = {
     audio: string;
     width: number;
     height: number;
+    audioEdit?: {url:string; blob:any };
     options: Array<string>
     true: number;
     answer: number | null;
