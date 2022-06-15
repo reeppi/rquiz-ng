@@ -21,7 +21,7 @@ export class AppComponent  {
   infoDialog() {
 
     const dialogRef = this.dialog.open(dialogComponent,
-      {  data: { text:'<center>tuomas.kokki@outlook.com</center>', 
+      {  data: { text:'tuomas.kokki@outlook.com', 
                   buttons: {ok:"Sulje"}}});
         dialogRef.afterClosed().subscribe(result => 
       { 

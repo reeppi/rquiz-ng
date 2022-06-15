@@ -48,7 +48,6 @@ export class MainComponent implements OnInit {
   }
 
   listQuizClick(q: any) {
-    console.log("click click");
     this.quizName = q.name;
   }
 
@@ -69,8 +68,12 @@ export class MainComponent implements OnInit {
     else 
     {
       setTimeout(() => { this.errorText =""}, 5000);
-      this.errorText ="Anna visan tunnus!";
+      this.errorText ="Anna visan nimi!";
     }
+  }
+
+  userClick(){
+    this.router.navigateByUrl('/user');
   }
 
   editClick(){
@@ -80,7 +83,7 @@ export class MainComponent implements OnInit {
     else 
     {
       setTimeout(() => { this.errorText =""}, 5000);
-      this.errorText ="Anna visan tunnus!";
+      this.errorText ="Anna visan nimi!";
     }
   }
 

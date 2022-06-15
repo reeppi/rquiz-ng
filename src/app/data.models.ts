@@ -1,3 +1,14 @@
+export type userType = {
+  email: string;
+  quiz?: string[];
+  name?: string;
+  max?: string;
+  age?: number;
+  desc?: string;
+  image?: boolean;
+  audio?: boolean;
+}
+
 export type listQuestionsType = {
   name: string;
   title: string;

@@ -1,0 +1,40 @@
+<div *ngIf="dataService.userData">
+
+<h4>{{ dataService.userData.email }}</h4>
+<strong>Omat visasi </strong>
+
+<div style="display:flex;  align-items: flex-start;"> 
+    <div>
+    <button style="margin:5px" (click)="openEdit(q)" mat-raised-button *ngFor="let q of dataService.userData.quiz">{{q}}</button>
+    </div>
+</div>
+Visoja: <strong>{{dataService.userData.quiz?.length }} /  {{ dataService.userData.max || 5}}</strong><br>
+
+
+<mat-form-field style="width:100%" appearance="fill">
+    <mat-label>Nimi</mat-label>
+    <input name="nimi"  matInput  maxlength="256" placeholder="Anna nimesi" [(ngModel)]="dataService.userData.name">
+</mat-form-field>
+
+<mat-form-field style="width:100%" appearance="fill">
+    <mat-label>Kuvaus</mat-label>
+    <input name="nimi"  matInput  maxlength="256" placeholder="Anna kuvaus" [(ngModel)]="dataService.userData.desc">
+</mat-form-field>
+<button mat-raised-button style="width:100%" (click)="save()">Tallenna</button>
+<p><button mat-raised-button style="width:100%" (click)="logout()">Kirjaudu ulos</button></p>
+</div>
+
+<p><button style="width:100%" mat-raised-button (click)="router.navigateByUrl('/');">Palaa etusivulle</button> </p>
+
+<div style="text-align: center;"> 
+{{dataService.errorMsg}}
+</div>
+
+
+<div *ngIf="dataService.loadingQuiz" style="display:flex; justify-content: center;">
+  <mat-spinner></mat-spinner> 
+   <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
+</div>
+<button mat-raised-button style="width:0%"></button>
+
+ 

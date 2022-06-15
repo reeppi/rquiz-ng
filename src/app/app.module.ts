@@ -28,7 +28,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatChipsModule} from '@angular/material/chips';
 import { dialogComponent } from './dialog/dialog.component';
 import { imageDialogComponent } from './dialog/image-dialog.component';
+import { renameDialogComponent } from './edit/rename-dialog.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ScoreboardComponent,
     dialogComponent,
     imageDialogComponent,
+    renameDialogComponent,
+    UserComponent
     
   ],
   imports: [
@@ -63,13 +67,15 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     DragDropModule,
     
     RouterModule.forRoot([
+      { path: 'user', component: UserComponent },
       { path: '', component: MainComponent },
       { path: ':quizName/test', component: MainComponent },
       { path: ':quizName/edit', component: EditComponent },
       { path: ':quizName/results', component: ResultsComponent },
       { path: ':quizName/scores', component: ScoreboardComponent },
       { path: ':quizName/:questionNumber', component: QuestionComponent },
-      { path: ':quizName', redirectTo: ':quizName/1', pathMatch: 'full' }
+      { path: ':quizName', redirectTo: ':quizName/1', pathMatch: 'full' },
+    
     ]),
     BrowserAnimationsModule
   ],

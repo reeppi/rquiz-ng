@@ -14,6 +14,8 @@ import  * as RecordRTC   from 'recordrtc';
 import { DomSanitizer } from '@angular/platform-browser';
 import {ChangeDetectorRef} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { renameDialogComponent } from './rename-dialog.component';
+import { Location } from '@angular/common'
 
 
 @Component({
@@ -33,7 +35,8 @@ export class EditComponent implements OnInit {
      private title:Title,
      public dialog: MatDialog,
      private domSanitizer: DomSanitizer,
-     private cd : ChangeDetectorRef
+     private cd : ChangeDetectorRef,
+     public location: Location
 
      ) { }
 
@@ -43,8 +46,6 @@ export class EditComponent implements OnInit {
   selQuestion : number=0;
   uploadingImage : Boolean = false;
   uploadingProgress : number=0;
-
-  audioMap = new Map<number,{url:string,blob:any}>();
 
   public recording = false;
   public url : any;
@@ -58,12 +59,11 @@ export class EditComponent implements OnInit {
     this.dataService.editErrorMsg = "";
     const routeParams = this.route.snapshot.paramMap;
     this.quizName= routeParams.get('quizName');
+
     if ( this.quizName ) 
     {
       if ( this.dataService.questionsData == null )
-      {
         this.fetchQuiz();
-      }
     }
   }
   sanitize(url1:string | undefined){
@@ -84,7 +84,6 @@ successCallback(stream:any) {
 
     this.recording=true;
     delete this.dataService.questionsData?.questions[this.selQuestion].audioEdit
-    this.audioMap.delete(this.selQuestion);
     this.seconds=0;
     this.cd.detectChanges();
 
@@ -108,20 +107,24 @@ stopRecording() {
 
 audioReady(blobUrl:any){
   console.log(this.selQuestion+":"+blobUrl);
-
   if ( this.dataService.questionsData) 
-  {
     this.dataService.questionsData.questions[this.selQuestion].audioEdit={ url:blobUrl, blob:this.recorder.getBlob() }
-  }
-    /*  
 
-  this.audioMap.set(this.selQuestion,{url:blobUrl,blob:this.recorder.getBlob()});
-  this.url=blobUrl;
-  this.audioBlob = this.recorder.getBlob();*/
   this.cd.detectChanges();
 }
 
-
+changeName()
+  {
+  const dialogRef = this.dialog.open(renameDialogComponent,{  data: {name:this.quizName}});
+    dialogRef.afterClosed().subscribe(result => { 
+      if ( this.dataService.questionsData != null )
+        if ( result )  
+        {
+          this.router.navigateByUrl('/'+result+'/edit');
+          this.quizName=result;
+        }
+    });
+}
 
 errorCallback(error:any) {
   this.dataService.editErrorMsg = 'Mikrofonia ei pääse käyttämään!';
@@ -138,9 +141,6 @@ async saveAudio() {
 
   await this.dataService.updateQuestions(this.quizName);
 
-
-  //formData.append("audio", this.audioMap.get(this.selQuestion)?.blob);
-  //formData.append("audio", this.audioBlob);
   this.uploadingImage = true;
   this.uploadingProgress = 0;
   this.cd.detectChanges();
@@ -177,7 +177,7 @@ async saveAudio() {
              this.dataService.questionsData.questions[this.selQuestion].audio=event.body.done;
              var pp = document.getElementById("player"+this.selQuestion) as any;
              if ( pp != null)  pp.load();
-             this.audioMap.delete(this.selQuestion);
+             delete this.dataService.questionsData.questions[this.selQuestion].audioEdit;
              this.cd.detectChanges();
           }
         }
@@ -187,11 +187,11 @@ async saveAudio() {
 
 }
 
-
-
   async fetchQuiz()
   {
     if ( this.quizName == null)  return;
+
+    console.log("FETCH NEW DATA");
     await this.dataService.fetchJsonData(this.quizName,true,null);
     if ( this.dataService.newQuiz ) {
       const dialogRef = this.dialog.open(dialogComponent,
@@ -208,7 +208,6 @@ async saveAudio() {
 
 
   test(x: number){
-    console.log(x);
     var pp = document.getElementById("eplayer"+this.selQuestion) as any;
     if ( pp != null)  pp.load();
     this.cd.detectChanges();

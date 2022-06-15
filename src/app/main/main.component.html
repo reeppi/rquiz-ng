@@ -1,7 +1,9 @@
   <div>
+
+    <div *ngIf="dataService.getLoggedIn()">
     <mat-form-field style="width:60%" appearance="fill">
-      <mat-label>Visan tunnus</mat-label>
-      <input name="nimi"  matInput  maxlength="256" placeholder="Anna visan tunnus" [(ngModel)]="quizName">
+      <mat-label>Visan nimi</mat-label>
+      <input name="nimi"  matInput  maxlength="30" #qqInput placeholder="Anna visan nimi" [(ngModel)]="quizName">
     </mat-form-field>
     <mat-form-field style="width:40%" appearance="fill" (click)="listClick()">
       <mat-label>Omat visasi</mat-label>
@@ -9,6 +11,13 @@
         <mat-option [value]="quiz" *ngFor="let quiz of dataService.listQuizData; ">{{quiz}}</mat-option>
       </mat-select>
     </mat-form-field>
+  </div>
+  <div *ngIf="!dataService.getLoggedIn()">
+    <mat-form-field style="width:100%" appearance="fill">
+      <mat-label>Visan nimi</mat-label>
+      <input name="nimi"  matInput  maxlength="30" placeholder="Anna visan nimi" [(ngModel)]="quizName">
+    </mat-form-field>
+  </div>
 </div>
 
 <mat-accordion>
@@ -39,7 +48,10 @@
   <button style="width:30%" mat-raised-button (click)="scoreBoardClick();">Pistetaulu</button>
 
   <div *ngIf="dataService.getLoggedIn()">
- <p><button style="width:100%" mat-raised-button (click)="editClick();">Luo/Muokkaa visaa {{this.quizName}}</button> </p>
+  <p>
+    <button style="width:80%" mat-raised-button (click)="editClick();">Luo/Muokkaa visaa {{this.quizName}}</button> 
+    <button style="width:20%" mat-raised-button (click)="userClick();">Oma</button>
+  </p>
   </div>
  <p>
    <button style="width:50%" mat-raised-button (click)="loginGoogle();"><img [src]="'assets/images/google_logo.png'"/> Kirjaudu Googlella</button>

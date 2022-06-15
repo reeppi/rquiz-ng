@@ -1,0 +1,35 @@
+
+     Muutetaan visa {{data.name}}
+        
+
+
+<div  style="display:flex; justify-content: center;">
+
+    <div  style="flex-direction: column;" >
+
+      <div>
+      <form class="example-form">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input  name="nimi" matInput #message maxlength="30" placeholder="Syötä uusi nimi" [(ngModel)]="toName">
+            <mat-hint align="end">{{message.value.length}} / 30</mat-hint>
+          </mat-form-field>
+      </form>
+      </div>
+      
+      <div *ngIf="loading">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      <div *ngIf="!loading">
+      <mat-dialog-actions style="justify-content: center;">
+        <button  class="mat-raised-button" (click)="ok()" [disabled]="loading">Muuta</button>
+        <button  class="mat-raised-button mat-primary" (click)="cancel()">Keskeytä</button>
+      </mat-dialog-actions>
+      </div>
+ 
+    </div>
+
+</div>
+<br>
+<div style="display:flex; justify-content: center;">
+{{errorMsg}}
+</div>

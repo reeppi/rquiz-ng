@@ -6,9 +6,12 @@ import localQuiz from './quiz.json';
 @Injectable({ providedIn: 'root' })
 export class DataService {
 
-  public listQuestionsData : models.listQuestionsType[] | null;
-  public questionsData : models.questionsType | null;
-  public scoresData : models.scoresType | null;
+  public quizName : string="" // lokaalien quizNamejen urakka.
+  public test : number = 0;
+  public userData : models.userType | null= null;
+  public listQuestionsData : models.listQuestionsType[] | null = null;
+  public questionsData : models.questionsType | null = null;
+  public scoresData : models.scoresType | null=null;
   public listQuizData : string[]=[];
   public errorMsg : string ="";
   public editErrorMsg : string ="";
@@ -20,13 +23,11 @@ export class DataService {
   public title = "TIETOVISA";
   public ssl : boolean = true;
   public token : string="";
-  public imageUrl : string="https://tietovisa.s3.eu-north-1.amazonaws.com";
+ // public imageUrl : string="https://tietovisa.s3.eu-north-1.amazonaws.com1";
+  public imageUrl:  string="https://eu2.contabostorage.com/cab6b4ec7ee045779d63f412f885dfe6:tietovisa";
 
   constructor( private cookieService: CookieService ){
       console.log (" :: "+window.location.hostname);
-      this.questionsData = null;
-      this.scoresData = null;
-      this.listQuestionsData = null;
  
       if ( !this.ssl ) 
         this.APIURL = "http://localhost:8888";
@@ -43,7 +44,48 @@ export class DataService {
     this.questionsData = { name:"", title:"", public:false, questions: [] }
   }
 
+  async fetchUserData(query: string, callback:any)
+  {
+    this.loadingQuiz=true;
+    console.log("fetch user data");
+    var tokeni : string|null = window.sessionStorage.getItem("JWT");
+    if ( tokeni == null ) { this.errorMsg = "Kirjaudu ensiksi sisään"; return {}; }
+    this.errorMsg ="";
+    const response = await window.fetch(this.APIURL+"/user"+query, { headers: new Headers({'Authorization': tokeni}) });
+    if (response.ok) {
+      const data  = await response.json();
+      if ( data.hasOwnProperty('error') )
+      { 
+          this.errorMsg = data.error;
+          if ( data.hasOwnProperty('newuser'))
+          {
+            this.loadingQuiz=false;
+            return { email:data.email }
+          }
+      }
+      else if ( data.hasOwnProperty('email'))
+        this.userData=data;
+      else
+        this.errorMsg = "Tuntematon virhe";
+      this.loadingQuiz=false;
+    }
+    this.loadingQuiz=false;
+    return { }
+  }
 
+  async addUser()
+  {
+    var tokeni : string|null = window.sessionStorage.getItem("JWT");
+    if ( tokeni == null ) { this.errorMsg = "Kirjaudu ensiksi sisään"; return; }
+    const response = await window.fetch(this.APIURL+"/user?adduser=true", { headers: new Headers({'Authorization': tokeni}) });
+    if (response.ok) {
+      const data  = await response.json();
+      if ( data.hasOwnProperty('error') )
+          this.errorMsg = data.error;
+       else 
+        this.userData=data;
+    }
+  }
 
   async deleteQuestions(quizName: string | null) 
   {
@@ -109,7 +151,6 @@ export class DataService {
     { 
     method: 'post', 
     headers: new Headers({
-     // 'Authorization': 'Basic '+btoa(this.username+':'+this.password), 
       'Authorization': tokeni,
       'Content-Type': 'application/json'
       }),
@@ -129,10 +170,9 @@ export class DataService {
     this.errorMsg ="";
     var tokeni : string|null = window.sessionStorage.getItem("JWT");
     if ( tokeni == null ) { 
-      this.errorMsg = "Pistetaulu on vain kirjautuneille,";
+      this.errorMsg = "Pistetaulu on vain kirjautuneille.";
       return; 
       }
-
     console.log("Adding to scoreboard "+name+":"+score);
     var scoreStr=score.toString();
     this.errorMsg ="";
@@ -192,8 +232,6 @@ export class DataService {
     }
   }
 
-
-  
   async fetchScores(quizName: string) 
   {
     this.loadingQuiz=true;
