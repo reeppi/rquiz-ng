@@ -105,8 +105,7 @@
 </mat-accordion>
 
 <p>
-    <button style="width:70%"  color="primary"  mat-raised-button (click)="addQuestion()">Lisää kysymys</button>
-    <button style="width:30%" mat-raised-button (click)="openQuiz()"> Avaa visa </button>
+    <button style="width:100%"  color="primary"  mat-raised-button (click)="addQuestion()">Lisää kysymys</button>
   </p>
 
   <input type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)" #fileUpload>
@@ -141,7 +140,9 @@
 </div>
 </div>
 </div>
-<p><button style="width:100%" mat-raised-button (click)="this.location.back();">Takaisin</button> </p>
+<p><button style="width:70%" mat-raised-button (click)="this.location.back();">Takaisin</button> 
+  <button style="width:30%" mat-raised-button (click)="openQuiz()">Avaa visa</button>
+</p>
 
 <div style="display:flex; justify-content: center;">
 <div *ngIf="dataService.loadingQuiz">
