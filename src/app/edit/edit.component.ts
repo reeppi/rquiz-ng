@@ -190,9 +190,9 @@ async saveAudio() {
   async fetchQuiz()
   {
     if ( this.quizName == null)  return;
-
     console.log("FETCH NEW DATA");
-    await this.dataService.fetchJsonData(this.quizName,true,null);
+    //await this.dataService.fetchJsonData(this.quizName,true,null);
+    await this.dataService.fetchEditQuestionData(this.quizName,true,null);
     if ( this.dataService.newQuiz ) {
       const dialogRef = this.dialog.open(dialogComponent,
         {  data: { text:"Tallennetaanko uusi visa "+this.quizName, 
@@ -203,6 +203,18 @@ async saveAudio() {
             if ( result ) { this.dataService.updateQuestions(this.quizName); }
         });
     }
+    if ( this.dataService.quizDeny ) {
+      const dialogRef = this.dialog.open(dialogComponent,
+        {  data: { text:this.dataService.errorMsg, 
+                    buttons: {ok:"Palaa"}}});
+          dialogRef.afterClosed().subscribe(result => 
+        { 
+          this.dataService.quizDeny= false;
+          this.dataService.errorMsg ="";
+          this.router.navigateByUrl('/');
+        });
+    }
+
   }
 
 

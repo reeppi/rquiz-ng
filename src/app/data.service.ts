@@ -200,6 +200,7 @@ export class DataService {
   }
 
   public newQuiz: Boolean=false;
+  public quizDeny: Boolean=false;
 
   async fetchJsonData(quizName: string, edit: boolean, callback:any) 
   {  
@@ -231,6 +232,45 @@ export class DataService {
        console.log("DataName : "+ this.questionsData?.name);
     }
   }
+
+  async fetchEditQuestionData(quizName: string, edit: boolean, callback:any) 
+  {  
+    this.errorMsg ="";
+    this.newQuiz=false;
+    this.quizDeny=false;
+    var tokeni : string|null = window.sessionStorage.getItem("JWT");
+    if ( tokeni == null ) { this.errorMsg = "Kirjaudu ensiksi sisään"; return; }
+    this.loadingQuiz=true;
+    const response = await window.fetch(this.APIURL+"/quiza?name="+quizName, { headers: new Headers({'Authorization': tokeni}) });
+    this.loadingQuiz=false;
+    if (response.ok) {
+       const data  = await response.json();
+       if ( data.hasOwnProperty('error') ) 
+       {
+          this.questionsData = null;
+          this.errorMsg = data.error;
+          if ( edit ) 
+          {
+            this.createNewQuiz();
+            if ( data.dialog )
+              this.newQuiz=true;
+            if ( data.deny ) 
+              this.quizDeny=true;
+          }
+       }
+       else 
+       {
+         this.errorMsg = "";
+         this.questionsData  = data;
+       }
+       console.log("DataName : "+ this.questionsData?.name);
+    }
+  }
+
+
+
+
+
 
   async fetchScores(quizName: string) 
   {
