@@ -16,6 +16,9 @@ import {ChangeDetectorRef} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { renameDialogComponent } from './rename-dialog.component';
 import { Location } from '@angular/common'
+const ImageBlobReduce = require('image-blob-reduce');
+declare var require: any
+const resize = new ImageBlobReduce();
 
 
 @Component({
@@ -241,7 +244,6 @@ async saveAudio() {
     var tokeni : string|null = window.sessionStorage.getItem("JWT");
     if ( tokeni == null ) { this.dataService.editErrorMsg = "Kirjaudu ensiksi sisään"; return; }
 
-    
     await this.dataService.updateQuestions(this.quizName);
     this.uploadingImage = true;
     this.uploadingProgress = 0;
@@ -251,8 +253,12 @@ async saveAudio() {
     if (file) {
         this.fileName = file.name;
         const formData = new FormData();
-        formData.append("image", file);
 
+        
+        console.log("RESIZE");
+        var blob= await resize.toBlob(file,{max: 3000});
+        console.log("size: "+blob.size);
+        formData.append("image", blob); 
     
         const upload$ = this.http.post<any>(this.dataService.APIURL+"/upload?name="+this.quizName+"&question="+this.selQuestion, formData,
         {

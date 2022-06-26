@@ -43,7 +43,8 @@ import { UserComponent } from './user/user.component';
     dialogComponent,
     imageDialogComponent,
     renameDialogComponent,
-    UserComponent
+    UserComponent,
+
     
   ],
   imports: [
